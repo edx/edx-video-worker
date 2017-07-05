@@ -1,0 +1,43 @@
+{  
+    "_SAMPLE_FORMAT":{  
+        "profile_name":{  
+            "encode_suffix":"to_prevent_collisions",
+            "resolution":"vertical_resolution",
+            "rate_factor":"crf_coeffecient",
+            "filetype":"output_file_extension"
+        }
+    },
+    "ENCODE_PROFILES":{  
+        "audio_mp3":{  
+            "encode_suffix":"AUD",
+            "resolution":0,
+            "rate_factor":192,
+            "filetype":"mp3"
+        },
+        "mobile_low":{  
+            "encode_suffix":"MB2",
+            "resolution":360,
+            "rate_factor":27,
+            "filetype":"mp4"
+        },
+        "mobile_high":{  
+            "encode_suffix":"MB1",
+            "resolution":540,
+            "rate_factor":27,
+            "filetype":"mp4"
+        },
+        "desktop_mp4":{  
+            "encode_suffix":"DTH",
+            "resolution":720,
+            "rate_factor":27,
+            "filetype":"mp4"
+        },
+        "hls":{
+            "encode_suffix":"HLS",
+            "resolution":0,
+            "rate_factor":0,
+            "filetype":"m3u8"
+        }
+
+    }
+}

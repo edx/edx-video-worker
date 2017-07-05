@@ -1,0 +1,101 @@
+#!/usr/bin/env python
+"""
+Copyright (C) 2016 @yro | Gregory Martin
+Command Line Interface
+"""
+
+import os
+import sys
+import argparse
+
+sys.path.append(
+    os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        'video_worker'
+        )
+    )
+from video_worker.__init__ import VideoWorker
+
+
+class VideoWorkerCli:
+
+    def __init__(self):
+        self.args = None
+        self.test = False
+
+    def get_args(self):
+        parser = argparse.ArgumentParser()
+        parser.usage = '''
+        {cmd} -v VEDAID
+        {cmd} -setup SetUp
+        {cmd} -test Test
+        {cmd} -e Encode
+        {cmd} -j Job
+        [-v -setup -test -e]
+        Use --help to see all options.
+        '''.format(cmd=sys.argv[0])
+
+        parser.add_argument(
+            '-v', '--vedaid', default=None, 
+            help='VEDA ID for source'
+            )
+
+        parser.add_argument(
+            '-e', '--profile', 
+            help='Encode Profile', 
+            )
+
+        parser.add_argument(
+            '-setup', '--setup', 
+            help='Configure Instance Credentials (one time)', 
+            action='store_true'
+            )
+
+        parser.add_argument(
+            '-j', '--job', 
+            help='Job ID',
+            default=None
+            )
+
+        parser.add_argument(
+            '-t', '--test', 
+            help='Test Configuration of Instance', 
+            action='store_true'
+            )
+
+        self.args = parser.parse_args()
+
+        self._parseargs()
+
+    def _parseargs(self):
+        self.veda_id = self.args.vedaid
+        self.encode_profile = self.args.profile
+        self.jobid = self.args.job
+        self.test = self.args.test
+        self.setup = self.args.setup
+
+    def run(self):
+        """
+        run actual instance
+        """
+        VW = VideoWorker(
+            veda_id=self.veda_id,
+            encode_profile=self.encode_profile,
+            setup=self.setup,
+            jobid=self.jobid
+            )
+        if self.test is True:
+            VW.test()
+        else:
+            VW.run()
+
+
+def main():
+    WorkerInstance = VideoWorkerCli()
+    WorkerInstance.get_args()
+    WorkerInstance.run()
+
+
+if __name__ == '__main__':
+    sys.exit(main())
+
