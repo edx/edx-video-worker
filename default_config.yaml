@@ -1,0 +1,66 @@
+---
+#---#
+# Config for edx-video-worker
+#---#
+
+## AWS Storage
+aws_access_key: 
+aws_deliver_access_key: 
+aws_deliver_bucket: 
+aws_deliver_secret_key: 
+aws_secret_key: 
+aws_storage_bucket: 
+multi_upload_barrier: 2000000000
+boto_timeout: 60
+
+## AWS Storage config for video images
+aws_video_images_access_key:
+aws_video_images_secret_key:
+aws_video_images_bucket:
+aws_video_images_prefix:
+
+## VAL API Auth
+val_api_url: 
+val_client_id: 
+val_password: 
+val_secret_key: 
+val_token_url: 
+val_username: 
+val_video_images_url:
+
+## VEDA API Auth
+veda_api_url: 
+veda_auth_url: 
+veda_client_id: 
+veda_secret_key: 
+veda_token_url: 
+
+## Encoding Config
+ffmpeg_compiled: 
+ffprobe_compiled: 
+
+# ## Celery Cluster Auth
+celery_app_name: 
+largefile_queue_barrier: 2000000000
+# This is a receiver list of queues
+# can do multiple queues like so: foo,bar,baz
+celery_receiver_queue: 
+# This is a sender set of queues
+main_celery_queue: 
+largefile_celery_queue: 
+# 
+rabbitmq_broker: 
+rabbitmq_pass: 
+rabbitmq_user: 
+
+## Shotgun
+shotgun_server: 
+shotgun_api_name: 
+shotgun_api_script_key: 
+
+## Isilon
+isilon_mount_ip: 
+isilon_mount_dir: 
+isilon_mount_key: 
+
+...
