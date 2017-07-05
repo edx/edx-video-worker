@@ -2,6 +2,6 @@ include README.rst
 include default_config.yaml
 include instance_config.yaml
 include default_encode_profiles.json
-include VEDA_TESTFILES/*.mp4
-include VEDA_TESTFILES/*.jpg
+include test_videofiles/*.mp4
+include test_videofiles/*.jpg
 include video_worker/tests/*

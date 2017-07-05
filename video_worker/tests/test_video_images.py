@@ -31,7 +31,7 @@ class VideoImagesTest(unittest.TestCase):
     def setUp(self):
         self.work_dir = os.path.join(
             os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-            'VEDA_TESTFILES'
+            'test_videofiles'
         )
         self.source_file = 'test.mp4'
 

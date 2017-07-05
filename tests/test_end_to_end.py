@@ -386,7 +386,7 @@ def main():
     if mezz_video == None:
         EE1.mezz_video=os.path.join(
             os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-            'VEDA_TESTFILES',
+            'test_videofiles',
             S1.TEST_VIDEO_FILE
             )
     else:

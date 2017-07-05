@@ -37,9 +37,9 @@ Settings for testing
 """
 TEST_VIDEO_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    'VEDA_TESTFILES'
+    'test_videofiles'
 )
-TEST_VIDEO_FILE = 'XXXXXXXX2016-V00TEST.mp4'
+TEST_VIDEO_FILE = 'OVTESTFILE_01.mp4'
 
 """
 TERM COLORS

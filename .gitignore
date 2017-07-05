@@ -16,3 +16,5 @@ ENCODE_WORKDIR/
 build/
 
 dist/
+
+edx_video_worker.egg-info/
