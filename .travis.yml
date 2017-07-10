@@ -17,5 +17,6 @@ script: video_worker
 script:
  - python tests/test_api_connect.py
  - python tests/test_build.py
+ - nosetests video_worker/tests/test_api_communicate.py
  - nosetests video_worker/tests/test_video_images.py
  - pep8
