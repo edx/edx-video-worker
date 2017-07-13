@@ -4,10 +4,12 @@ based on variables within
 
 """
 
+import logging
 import os
 import sys
 import yaml
-from reporting import ErrorObject
+
+logger = logging.getLogger(__name__)
 
 
 class WorkerSetup:
@@ -47,21 +49,15 @@ class WorkerSetup:
         Read Extant Settings or Generate New Ones
         """
         if not os.path.exists(self.instance_yaml):
-            ErrorObject.print_error(
-                message='Not Configured'
-            )
-            return None
+            logger.error('Not Configured')
+            return
 
         with open(self.instance_yaml, 'r') as stream:
             try:
                 self.settings_dict = yaml.load(stream)
-
             except yaml.YAMLError as exc:
-                ErrorObject.print_error(
-                    message='Config YAML read error'
-                )
-
-                return None
+                logger.error('Config YAML read error')
+                return
 
     def _CONFIGURE(self):
         """
@@ -71,10 +67,8 @@ class WorkerSetup:
             try:
                 config_dict = yaml.load(stream)
             except yaml.YAMLError as exc:
-                ErrorObject.print_error(
-                    message='default YAML read error'
-                )
-                return None
+                logger.error('default YAML read error')
+                return
 
         output_dict = {}
 
@@ -97,15 +91,3 @@ class WorkerSetup:
             )
 
         self.settings_dict = output_dict
-
-
-def main():
-    """
-    For example
-    """
-    V = WorkerSetup()
-    V.run()
-
-
-if __name__ == '__main__':
-    sys.exit(main())
