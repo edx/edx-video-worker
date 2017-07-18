@@ -1,16 +1,15 @@
 """
-Transmit endpoint URL data to VEDA via VEDA API
-
+This module is responsible for communication with edx-video-pipeline like sending veda and val status.
 """
 
 import ast
 import json
+import logging
 import os
 import operator
 import requests
+import sys
 
-from global_vars import *
-from reporting import ErrorObject
 import generate_apitoken
 from config import WorkerSetup
 
@@ -21,6 +20,9 @@ if os.path.exists(WS.instance_yaml):
 settings = WS.settings_dict
 # Disable warning
 requests.packages.urllib3.disable_warnings()
+
+
+logger = logging.getLogger(__name__)
 
 
 class UpdateAPIStatus:
@@ -52,9 +54,7 @@ class UpdateAPIStatus:
 
         self.veda_token = generate_apitoken.veda_tokengen()
         if self.veda_token is None:
-            ErrorObject().print_error(
-                message='VEDA API Conn Fail:\nInvalid Setup/Method'
-            )
+            logger.error('VEDA API Conn Fail: Invalid Setup/Method')
             return None
 
         self.veda_headers = {
@@ -104,9 +104,7 @@ class UpdateAPIStatus:
         )
 
         if y.status_code != 200:
-            ErrorObject().print_error(
-                message='VEDA API Fail: Check VEDA API config'
-            )
+            logger.error('VEDA API Fail: Check VEDA API config')
             return None
 
         return json.loads(y.text)
@@ -136,9 +134,7 @@ class UpdateAPIStatus:
             )
             if w.status_code != 200:
 
-                ErrorObject().print_error(
-                    message='VEDA API Fail: File \'GET\' Failure, no objects'
-                )
+                logger.error('VEDA API Fail: File GET Failure, no objects')
 
     def send_val_data(self):
         """
@@ -188,9 +184,7 @@ class UpdateAPIStatus:
             """
             Total API Failure
             """
-            ErrorObject().print_error(
-                message='VAL Communication Fail'
-            )
+            logger.error('VAL Communication Fail')
             return None
 
         if r1.status_code == 404:
@@ -210,10 +204,7 @@ class UpdateAPIStatus:
             )
 
             if r2.status_code > 299:
-                ErrorObject().print_error(
-                    method=self,
-                    message='VAL POST/PUT Fail: VAL'
-                )
+                logger.error('VAL POST/PUT Fail: VAL')
                 return None
 
         elif r1.status_code == 200:
@@ -258,14 +249,5 @@ class UpdateAPIStatus:
             )
 
             if r2.status_code > 299:
-                ErrorObject().print_error(
-                    message='VAL POST/PUT Fail'
-                )
+                logger.error('VAL POST/PUT Fail')
                 return None
-
-
-def main():
-    pass
-
-if __name__ == '__main__':
-    sys.exit(main())
