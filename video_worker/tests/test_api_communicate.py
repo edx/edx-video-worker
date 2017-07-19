@@ -11,14 +11,11 @@ from mock import Mock, patch
 
 from video_worker.abstractions import Video
 from video_worker.api_communicate import UpdateAPIStatus
-from video_worker.config import WorkerSetup
+
+from utils import create_worker_setup
 
 
-TEST_INSTANCE_YAML = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)),
-    'test_instance_config.yaml'
-)
-WS = WorkerSetup(**{'instance_yaml': TEST_INSTANCE_YAML})
+WS = create_worker_setup()
 WS.run()
 
 

@@ -1,14 +1,13 @@
 """
-Simple set of token creators for attached APIs
+Generates authorized Video Pipeline and VAL token.
 
 """
 
 import ast
+import logging
 import os
 import requests
-import sys
 
-from reporting import ErrorObject
 from config import WorkerSetup
 
 """Disable insecure warning for requests lib"""
@@ -20,13 +19,16 @@ if os.path.exists(WS.instance_yaml):
 settings = WS.settings_dict
 
 
+logger = logging.getLogger(__name__)
+
+
 def veda_tokengen():
     """
     Gen and authorize a VEDA API token
     """
     # Generate Token
     payload = {'grant_type': 'client_credentials'}
-    r = requests.post(
+    veda_token_response = requests.post(
         settings['veda_token_url'] + '/',
         params=payload,
         auth=(
@@ -35,13 +37,12 @@ def veda_tokengen():
         ),
         timeout=20
     )
-    if r.status_code == 200:
-        veda_token = ast.literal_eval(r.text)['access_token']
-    else:
-        ErrorObject().print_error(
-            message='VEDA Token Generate',
-        )
-        return None
+
+    if veda_token_response.status_code != 200:
+        logger.error('VEDA Token Generate')
+        return
+
+    veda_token = ast.literal_eval(veda_token_response.text)['access_token']
 
     # Authorize token
     """
@@ -53,17 +54,16 @@ def veda_tokengen():
     **it's shit, and needs a rewrite. see api.py in veda-django
     """
     payload = {'data': veda_token}
-    t = requests.post(
+    veda_auth_response = requests.post(
         settings['veda_auth_url'] + '/',
         data=payload
     )
-    if t.status_code == 200:
-        return t.text.strip()
-    else:
-        ErrorObject().print_error(
-            message='VEDA Token Authorization',
-        )
-        return None
+
+    if veda_auth_response.status_code != 200:
+        logger.error('VEDA Token Authorization')
+        return
+
+    return veda_auth_response.text.strip()
 
 
 def val_tokengen():
@@ -78,13 +78,10 @@ def val_tokengen():
         'password': settings['val_password']
     }
 
-    r = requests.post(settings['val_token_url'] + '/', data=payload, timeout=20)
+    response = requests.post(settings['val_token_url'] + '/', data=payload, timeout=20)
 
-    if r.status_code != 200:
-        ErrorObject().print_error(
-            message='Token Gen Fail: VAL\nCheck VAL Config'
-        )
-        return None
+    if response.status_code != 200:
+        logger.error('Token Gen Fail: VAL - Check VAL Config')
+        return
 
-    val_token = ast.literal_eval(r.text)['access_token']
-    return val_token
+    return ast.literal_eval(response.text)['access_token']
