@@ -22,3 +22,5 @@ edx_video_worker.egg-info/
 
 coverage/
 .coverage
+
+test_videofiles/
