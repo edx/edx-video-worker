@@ -127,10 +127,7 @@ class VideoImages(object):
         """
         Upload auto generated images to S3.
         """
-        s3_connection = S3Connection(
-            self.settings['aws_video_images_access_key'],
-            self.settings['aws_video_images_secret_key']
-        )
+        s3_connection = S3Connection()
 
         try:
             bucket = s3_connection.get_bucket(self.settings['aws_video_images_bucket'])

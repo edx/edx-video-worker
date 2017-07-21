@@ -4,18 +4,10 @@
 #---#
 
 ## AWS Storage
-aws_access_key: 
-aws_deliver_access_key: 
-aws_deliver_bucket: 
-aws_deliver_secret_key: 
-aws_secret_key: 
-aws_storage_bucket: 
+aws_deliver_bucket:
+aws_storage_bucket:
 multi_upload_barrier: 2000000000
 boto_timeout: 60
-
-## AWS Storage config for video images
-aws_video_images_access_key:
-aws_video_images_secret_key:
 aws_video_images_bucket:
 aws_video_images_prefix:
 
@@ -59,8 +51,8 @@ shotgun_api_name:
 shotgun_api_script_key: 
 
 ## Isilon
-isilon_mount_ip: 
-isilon_mount_dir: 
-isilon_mount_key: 
+isilon_mount_ip:
+isilon_mount_dir:
+isilon_mount_key:
 
 ...

@@ -10,6 +10,7 @@ import subprocess
 import shutil
 
 from boto.s3.connection import S3Connection
+from boto.exception import S3ResponseError
 from os.path import expanduser
 from chunkey import Chunkey
 
@@ -237,23 +238,22 @@ class VideoWorker(object):
 
             return None
         if self.source_file is None:
-            conn = S3Connection(
-                self.settings['aws_access_key'],
-                self.settings['aws_secret_key']
-            )
+            conn = S3Connection()
             try:
                 bucket = conn.get_bucket(self.settings['aws_storage_bucket'])
 
-            except:
+            except S3ResponseError:
                 ErrorObject().print_error(
                     message='Invalid Storage Bucket'
                 )
                 return None
-
-            self.source_file = '.'.join((
-                self.VideoObject.veda_id,
-                self.VideoObject.mezz_extension
-            ))
+            if self.VideoObject.mezz_extension is not None and len(self.VideoObject.mezz_extension) > 0:
+                self.source_file = '.'.join((
+                    self.VideoObject.veda_id,
+                    self.VideoObject.mezz_extension
+                ))
+            else:
+                self.source_file = self.VideoObject.veda_id
             source_key = bucket.get_key(self.source_file)
 
             if source_key is None:
