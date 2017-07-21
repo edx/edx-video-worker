@@ -6,6 +6,7 @@ from VEDA_WORK_DIR, retrieves and checks URL, and passes info to objects
 
 import boto
 import boto.s3
+from boto.exception import S3ResponseError
 from boto.s3.key import Key
 import hashlib
 import os
@@ -96,13 +97,10 @@ class Deliverable():
         node_config MULTI_UPLOAD_BARRIER
         """
         try:
-            conn = boto.connect_s3(
-                settings['aws_deliver_access_key'],
-                settings['aws_deliver_secret_key']
-            )
+            conn = boto.connect_s3()
             delv_bucket = conn.get_bucket(settings['aws_deliver_bucket'])
 
-        except:
+        except S3ResponseError:
             ErrorObject().print_error(
                 message='Deliverable Fail: s3 Connection Error - Singleton'
             )
@@ -145,12 +143,9 @@ class Deliverable():
 
         # Connect to s3
         try:
-            c = boto.connect_s3(
-                settings['aws_deliver_access_key'],
-                settings['aws_deliver_secret_key']
-            )
+            c = boto.connect_s3()
             b = c.lookup(settings['aws_deliver_bucket'])
-        except:
+        except S3ResponseError:
             ErrorObject().print_error(
                 message='Deliverable Fail: s3 Connection Error - Multipart'
             )

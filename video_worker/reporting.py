@@ -119,11 +119,7 @@ class EmailAlert(object):
         email_body += self.ipaddy
         email_body += ' : This worker has been terminated\n'
 
-        conn = boto.ses.connect_to_region(
-            'us-east-1',
-            aws_access_key_id=self.auth_dict['abvid_access_key_id'],
-            aws_secret_access_key=self.auth_dict['abvid_secret_access_key']
-        )
+        conn = boto.ses.connect_to_region('us-east-1')
 
         conn.send_email(
             self.sender,
