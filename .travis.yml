@@ -1,5 +1,5 @@
 language: python
-dist: precise
+dist: xenial
 python:
   - "2.7"
 sudo: required
@@ -12,6 +12,7 @@ install:
   - pip install pep8
   - pip install -r requirements.txt
   - pip install -r test-requirements.txt
+  - pip install codecov
 
 script: video_worker
 
@@ -23,3 +24,6 @@ script:
  - nosetests video_worker/tests/test_config.py
  - nosetests video_worker/tests/test_video_images.py
  - pep8
+
+after_success:
+  - codecov
