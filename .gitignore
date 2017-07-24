@@ -18,3 +18,7 @@ build/
 dist/
 
 edx_video_worker.egg-info/
+
+
+coverage/
+.coverage

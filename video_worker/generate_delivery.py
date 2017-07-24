@@ -14,7 +14,7 @@ from os.path import expanduser
 import sys
 import shutil
 
-from global_vars import *
+from global_vars import MULTI_UPLOAD_BARRIER
 from reporting import ErrorObject
 from config import WorkerSetup
 
@@ -71,14 +71,10 @@ class Deliverable():
         ).hexdigest()
 
         if self.upload_filesize < MULTI_UPLOAD_BARRIER:
-            """
-            Upload single part
-            """
+            # Upload single part
             self.delivered = self._s3_upload()
         else:
-            """
-            Upload multipart
-            """
+            # Upload multipart
             self.delivered = self._boto_multipart()
 
         if self.delivered is False:
@@ -157,9 +153,7 @@ class Deliverable():
             )
             return False
 
-        """
-        Upload and stitch parts
-        """
+        # Upload and stitch parts
         mp = b.initiate_multipart_upload(self.output_file)
 
         x = 1
@@ -180,11 +174,3 @@ class Deliverable():
         # Clean up multipart
         shutil.rmtree(os.path.join(self.workdir, self.output_file.split('.')[0]))
         return True
-
-
-def main():
-    pass
-
-
-if __name__ == '__main__':
-    sys.exit(main())

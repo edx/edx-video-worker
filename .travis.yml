@@ -1,4 +1,7 @@
 language: python
+
+dist: precise
+
 python:
   - "2.7"
 sudo: required
@@ -8,17 +11,17 @@ before_install:
   - sudo apt-get install -y ffmpeg
 
 install:
-  - pip install pep8
   - pip install -r requirements.txt
   - pip install -r test-requirements.txt
+  - pip install codecov
 
 script: video_worker
 
 script:
- - python tests/test_api_connect.py
- - python tests/test_build.py
- - nosetests video_worker/tests/test_api_communicate.py
- - nosetests video_worker/tests/test_generate_token.py
- - nosetests video_worker/tests/test_config.py
- - nosetests video_worker/tests/test_video_images.py
- - pep8
+  - python tests/test_api_connect.py
+  - python tests/test_build.py
+  - make validate
+
+after_success:
+  - pip install -U codecov
+  - codecov

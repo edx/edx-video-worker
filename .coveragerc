@@ -1,0 +1,26 @@
+# .coveragerc for edx-video-worker
+[run]
+data_file = reports/.coverage
+source =
+    video_worker
+    tests
+
+omit =
+    video_worker/tests/*
+    tests/*
+
+concurrency=multiprocessing
+
+[report]
+ignore_errors = True
+
+exclude_lines =
+   pragma: no cover
+   raise NotImplementedError
+
+[html]
+title = edx-video-worker Python Test Coverage Report
+directory = reports/cover
+
+[xml]
+output = reports/coverage.xml
