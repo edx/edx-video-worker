@@ -83,6 +83,8 @@ class VideoWorker(object):
         # Pipeline Steps
         self.encoded = False
         self.delivered = False
+        self.course_url = kwargs.get('course_ids', [])
+        self.video_id = kwargs.get('video_id', '')
 
     def test(self):
         """
@@ -118,6 +120,7 @@ class VideoWorker(object):
             return None
         self.VideoObject = Video(
             veda_id=self.veda_id,
+            course_url=self.course_url
         )
         if self.source_file is not None:
             self.VideoObject.mezz_filepath = os.path.join(
@@ -162,6 +165,7 @@ class VideoWorker(object):
         # generate video images command and update S3 and edxval
         # run against 'hls' encode only
         if self.encode_profile == 'hls':
+            self.VideoObject.val_id = self.video_id
             VideoImages(
                 video_object=self.VideoObject,
                 work_dir=self.workdir,
