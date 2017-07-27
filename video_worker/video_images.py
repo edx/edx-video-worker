@@ -163,7 +163,7 @@ class VideoImages(object):
                 }
 
                 val_headers = {
-                    'Authorization': 'Bearer ' + generate_apitoken.val_tokengen(),
+                    'Authorization': 'Bearer {val_token}'.format(val_token=generate_apitoken.val_tokengen()),
                     'content-type': 'application/json'
                 }
 
