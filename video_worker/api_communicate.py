@@ -64,9 +64,7 @@ class UpdateAPIStatus:
 
         self.veda_video_dict = self.determine_veda_pk()
 
-        """
-        Status Update Only
-        """
+        # Status Update Only
         if self.veda_video_status is not None:
             return self.send_veda_status()
 
@@ -181,16 +179,12 @@ class UpdateAPIStatus:
         )
 
         if r1.status_code != 200 and r1.status_code != 404:
-            """
-            Total API Failure
-            """
+            # Total API Failure
             logger.error('VAL Communication Fail')
             return None
 
         if r1.status_code == 404:
-            """
-            Generate new VAL ID (shouldn't happen, but whatever)
-            """
+            # Generate new VAL ID (shouldn't happen, but whatever)
             val_data['encoded_videos'] = []
             val_data['courses'] = self.VideoObject.course_url
             val_data['status'] = self.val_video_status
@@ -208,39 +202,30 @@ class UpdateAPIStatus:
                 return None
 
         elif r1.status_code == 200:
-            """
-            ID is previously extant
-            """
+            # ID is previously extant
             val_api_return = ast.literal_eval(r1.text)
             # extract course ids, courses will be a list of dicts, [{'course_id': 'image_name'}]
             course_ids = reduce(operator.concat, (d.keys() for d in val_api_return['courses']))
 
-            """
-            VAL will not allow duped studio urls to be sent, so
-            we must scrub the data
-            """
+            # VAL will not allow duped studio urls to be sent, so
+            # we must scrub the data
+
             for course_id in self.VideoObject.course_url:
                 if course_id in course_ids:
                     self.VideoObject.course_url.remove(course_id)
 
             val_data['courses'] = self.VideoObject.course_url
 
-            """
-            Double check for profiles in case of overwrite
-            """
+            # Double check for profiles in case of overwrite
             val_data['encoded_videos'] = []
             # add back in the encodes
             for e in val_api_return['encoded_videos']:
                 val_data['encoded_videos'].append(e)
 
-            """
-            Determine Status
-            """
+            # Determine Status
             val_data['status'] = self.val_video_status
 
-            """
-            Make Request, finally
-            """
+            # Make Request, finally
             r2 = requests.put(
                 '/'.join((settings['val_api_url'], self.VideoObject.val_id)),
                 data=json.dumps(val_data),
