@@ -100,6 +100,7 @@ class Video(object):
                 """
                 self.vid_pk = v['id']
                 self.class_id = v['inst_class']
+                self.course_url = v['course_ids']
                 self.val_id = v['studio_id']
                 self.mezz_extension = v['video_orig_extension']
                 self.mezz_bitrate = v['video_orig_bitrate']

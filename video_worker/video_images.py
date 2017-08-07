@@ -154,23 +154,25 @@ class VideoImages(object):
         Update a course video in edxval database for auto generated images.
         """
         if len(image_keys) > 0:
-            data = {
-                'course_id': self.video_object.course_url,
-                'edx_video_id': self.video_object.val_id,
-                'generated_images': image_keys
-            }
 
-            val_headers = {
-                'Authorization': 'Bearer ' + generate_apitoken.val_tokengen(),
-                'content-type': 'application/json'
-            }
+            for course_id in self.video_object.course_url:
+                data = {
+                    'course_id': course_id,
+                    'edx_video_id': self.video_object.val_id,
+                    'generated_images': image_keys
+                }
 
-            response = requests.post(
-                self.settings['val_video_images_url'],
-                data=json.dumps(data),
-                headers=val_headers,
-                timeout=20
-            )
+                val_headers = {
+                    'Authorization': 'Bearer {val_token}'.format(val_token=generate_apitoken.val_tokengen()),
+                    'content-type': 'application/json'
+                }
 
-        if not response.ok:
-            ErrorObject.print_error(message=response.content)
+                response = requests.post(
+                    self.settings['val_video_images_url'],
+                    data=json.dumps(data),
+                    headers=val_headers,
+                    timeout=20
+                )
+
+                if not response.ok:
+                    ErrorObject.print_error(message=response.content)
