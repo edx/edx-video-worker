@@ -82,7 +82,7 @@ class Deliverable():
 
         self.endpoint_url = '/'.join((
             'https://s3.amazonaws.com',
-            settings['aws_deliver_bucket'],
+            settings['veda_deliverable_bucket'],
             self.output_file
         ))
         return True
@@ -94,7 +94,7 @@ class Deliverable():
         """
         try:
             conn = boto.connect_s3()
-            delv_bucket = conn.get_bucket(settings['aws_deliver_bucket'])
+            delv_bucket = conn.get_bucket(settings['veda_deliverable_bucket'])
 
         except S3ResponseError:
             ErrorObject().print_error(
@@ -140,7 +140,7 @@ class Deliverable():
         # Connect to s3
         try:
             c = boto.connect_s3()
-            b = c.lookup(settings['aws_deliver_bucket'])
+            b = c.lookup(settings['veda_deliverable_bucket'])
         except S3ResponseError:
             ErrorObject().print_error(
                 message='Deliverable Fail: s3 Connection Error - Multipart'

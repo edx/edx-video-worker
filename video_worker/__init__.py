@@ -130,8 +130,7 @@ class VideoWorker(object):
         #   (*)VI. Change Status in APIs, add URLs
         #   VII. Clean Directory
 
-        if 'ENCODE_WORKDIR' not in self.workdir:
-            self._engine_intake()
+        self._engine_intake()
 
         if not self.VideoObject.valid:
             logger.error('[VIDEO_WORKER] Invalid Video / Local')
@@ -209,7 +208,7 @@ class VideoWorker(object):
         if self.source_file is None:
             conn = S3Connection()
             try:
-                bucket = conn.get_bucket(self.settings['aws_storage_bucket'])
+                bucket = conn.get_bucket(self.settings['veda_s3_hotstore_bucket'])
             except S3ResponseError:
                 logger.error('[VIDEO_WORKER] Invalid Storage Bucket')
                 return
@@ -273,12 +272,9 @@ class VideoWorker(object):
         if this is just a filepath, this should just work
         --no need to move the source--
         """
-        if not os.path.exists(
-                os.path.join(self.workdir, self.source_file)
-        ):
+        if not os.path.exists(os.path.join(self.workdir, self.source_file)):
             logger.error('[VIDEO_WORKER] Source File (local) NOT FOUND - Input')
             return
-
         process = subprocess.Popen(
             self.ffcommand,
             stdout=subprocess.PIPE,

@@ -51,15 +51,15 @@ class Video(object):
         self.course_url = kwargs.get('course_url', [])
 
     def activate(self):
-
+        """
+        test case
+        """
         if self.veda_id is not None and len(settings['veda_api_url']) == 0:
             ErrorObject().print_error(
                 message='VEDA API Config Incorrect, run test to debug'
             )
             return None
-        """
-        test case
-        """
+
         if self.veda_id is None and self.mezz_filepath is None:
             print self.mezz_filepath
             self.mezz_extension = '.mp4'
@@ -114,7 +114,7 @@ class Video(object):
                 self.mezz_duration = Output.seconds_from_string(uni_duration)
                 self.mezz_filepath = '/'.join((
                     'https://s3.amazonaws.com',
-                    settings['aws_storage_bucket'],
+                    settings['veda_s3_hotstore_bucket'],
                     self.veda_id + '.' + self.mezz_extension
                 ))
                 self.valid = True
