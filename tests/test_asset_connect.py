@@ -29,7 +29,7 @@ class TestAssetConnection(unittest.TestCase):
 
         conn = S3Connection()
         try:
-            bucket = conn.get_bucket(self.settings['aws_storage_bucket'])
+            bucket = conn.get_bucket(self.settings['veda_s3_hotstore_bucket'])
             self.assertTrue(True)
         except S3ResponseError:
             self.assertFalse(True)
@@ -40,7 +40,7 @@ class TestAssetConnection(unittest.TestCase):
 
         conn = S3Connection()
         try:
-            bucket = conn.get_bucket(self.settings['aws_deliver_bucket'])
+            bucket = conn.get_bucket(self.settings['veda_deliverable_bucket'])
             self.assertTrue(True)
         except S3ResponseError:
             self.assertFalse(True)
