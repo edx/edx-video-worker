@@ -16,6 +16,4 @@ CONCUR=${CONCUR#*: }
 echo $QUEUE
 echo $CONCUR
 
-NEW_RELIC_CONFIG_FILE=${ROOTDIR}/veda_worker_newrelic.ini newrelic-admin run-program python ${ROOTDIR}/video_worker/celeryapp.py worker \
-        --loglevel=info --concurrency=${CONCUR} -Q ${QUEUE} -n worker.%h
-
+python ${ROOTDIR}/video_worker/celeryapp.py worker --loglevel=info --concurrency=${CONCUR} -Q ${QUEUE} -n worker.%h
