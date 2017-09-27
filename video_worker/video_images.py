@@ -146,6 +146,7 @@ class VideoImages(object):
             )
             image_keys.append(upload_key.key)
             upload_key.set_contents_from_filename(generated_image)
+            upload_key.set_acl('public-read')
 
         return image_keys
 
