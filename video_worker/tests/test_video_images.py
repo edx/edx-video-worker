@@ -1,20 +1,19 @@
 """
 Video image generation tests.
 """
-from ddt import ddt, data, unpack
-from mock import patch, Mock
 import os
+import tempfile
 import unittest
+
+import yaml
+from boto.s3.connection import S3Connection
+from ddt import data, ddt, unpack
+from mock import Mock, patch
+from moto import mock_s3_deprecated
 from PIL import Image
 
-
+from utils import TEST_INSTANCE_YAML
 from video_worker import video_images
-
-MOCK_SETTINGS = {
-    'ffmpeg_compiled': 'ffmpeg',
-    'val_client_id':  None,
-    'val_video_images_url': 'https://www.testimg.com/update/images'
-}
 
 
 class MockVideo(object):
@@ -37,6 +36,8 @@ class VideoImagesTest(unittest.TestCase):
             'test_videofiles'
         )
         self.source_file = 'test.mp4'
+        with open(TEST_INSTANCE_YAML, 'r') as stream:
+            self.settings = yaml.load(stream)
 
     @data(
         {
@@ -69,7 +70,7 @@ class VideoImagesTest(unittest.TestCase):
             work_dir=self.work_dir,
             source_file=self.source_file,
             jobid=101,
-            settings=MOCK_SETTINGS
+            settings=self.settings
         ).generate()
 
         self.assertEqual(len(images), video_images.IMAGE_COUNT)
@@ -111,8 +112,26 @@ class VideoImagesTest(unittest.TestCase):
                 work_dir=self.work_dir,
                 source_file=self.source_file,
                 jobid=101,
-                settings=MOCK_SETTINGS
+                settings=self.settings
             ).update_val(image_keys)
 
             self.assertEqual(mock_post.called, post_called)
             self.assertEqual(mock_post.call_count, post_call_count)
+
+    @mock_s3_deprecated
+    def test_upload_image_keys(self):
+        """
+        Verify that VideoImages.upload construct correct s3 keys.
+        """
+        conn = S3Connection()
+        conn.create_bucket(self.settings['aws_video_images_bucket'])
+
+        s3_image_keys = video_images.VideoImages(
+            video_object=MockVideo,
+            work_dir=self.work_dir,
+            source_file=self.source_file,
+            jobid=101,
+            settings=self.settings
+        ).upload(['video_worker/tests/data/edx.jpg'])
+
+        self.assertEqual(s3_image_keys, ['video-images/edx.jpg'])
