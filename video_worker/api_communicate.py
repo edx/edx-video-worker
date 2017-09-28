@@ -98,7 +98,7 @@ class UpdateAPIStatus:
             '/'.join((settings['veda_api_url'], 'videos', '')),
             params=data,
             headers=self.veda_headers,
-            timeout=20
+            timeout=settings['global_timeout']
         )
 
         if y.status_code != 200:
@@ -175,7 +175,7 @@ class UpdateAPIStatus:
         r1 = requests.get(
             '/'.join((settings['val_api_url'], self.VideoObject.val_id, '')),
             headers=self.val_headers,
-            timeout=20
+            timeout=settings['global_timeout']
         )
 
         if r1.status_code != 200 and r1.status_code != 404:
@@ -194,7 +194,7 @@ class UpdateAPIStatus:
                 settings['val_api_url'],
                 data=json.dumps(val_data),
                 headers=self.val_headers,
-                timeout=20
+                timeout=settings['global_timeout']
             )
 
             if r2.status_code > 299:
@@ -230,7 +230,7 @@ class UpdateAPIStatus:
                 '/'.join((settings['val_api_url'], self.VideoObject.val_id)),
                 data=json.dumps(val_data),
                 headers=self.val_headers,
-                timeout=20
+                timeout=settings['global_timeout']
             )
 
             if r2.status_code > 299:

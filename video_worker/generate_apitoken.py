@@ -35,7 +35,7 @@ def veda_tokengen():
             settings['veda_client_id'],
             settings['veda_secret_key']
         ),
-        timeout=20
+        timeout=settings['global_timeout']
     )
 
     if veda_token_response.status_code != 200:
@@ -78,7 +78,7 @@ def val_tokengen():
         'password': settings['val_password']
     }
 
-    response = requests.post(settings['val_token_url'] + '/', data=payload, timeout=20)
+    response = requests.post(settings['val_token_url'] + '/', data=payload, timeout=settings['global_timeout'])
 
     if response.status_code != 200:
         logger.error('Token Gen Fail: VAL - Check VAL Config')

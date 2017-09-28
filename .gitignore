@@ -1,6 +1,4 @@
 
-instance_config.yaml
-
 *.pyc
 
 VEDA_WORKING/
@@ -19,8 +17,8 @@ dist/
 
 edx_video_worker.egg-info/
 
-
 coverage/
+
 .coverage
 
 test_videofiles/
