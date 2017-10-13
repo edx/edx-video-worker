@@ -172,7 +172,7 @@ class VideoImages(object):
                     self.settings['val_video_images_url'],
                     data=json.dumps(data),
                     headers=val_headers,
-                    timeout=20
+                    timeout=settings['global_timeout']
                 )
 
                 if not response.ok:

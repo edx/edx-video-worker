@@ -1,7 +1,23 @@
 ---
+
+#--
+# Global settings
+heal_start: 1
+heal_end: 144
+global_timeout: 40
+
 # ---
 # Database information
 # ---
+## PRODUCTION
+DATABASES:
+    default:
+        ENGINE: 'django.db.backends.mysql'
+        NAME: ""
+        USER: ''
+        PASSWORD: ''
+        HOST: ''
+        PORT: '3306'
 
 # SANDBOX
 #DATABASES:
@@ -9,37 +25,31 @@
 #        ENGINE: django.db.backends.sqlite3
 #        NAME: sandbox.db
 
-## PRODUCTION
-DATABASES:
-    default:
-        ENGINE: 'django.db.backends.mysql'
-        NAME:
-        USER:
-        PASSWORD:
-        HOST:
-        PORT: '3306'
-
 django_secret_key: ""
 
+debug: false
 # ---
-# AWS Buckets, Prefixes
+# AWS
 # ---
-# Studio/Platform
-edx_s3_ingest_prefix:
-edx_s3_ingest_bucket:
-edx_s3_endpoint_bucket:
-# CF
-edx_cloudfront_prefix:
-# Images
-aws_video_images_bucket:
-aws_video_images_prefix: "video-images/"
-# VEDA Internal
 veda_s3_upload_bucket:
 veda_s3_hotstore_bucket:
 veda_deliverable_bucket:
-# Settings
+veda_upload_bucket:
+edx_s3_ingest_prefix: ''
 multi_upload_barrier: 2000000000
+edx_s3_ingest_bucket:
+edx_s3_endpoint_bucket:
+edx_cloudfront_prefix:
+aws_video_images_bucket:
+aws_video_images_prefix: ''
 
+veda_base_url:
+
+aws_video_transcripts_bucket:
+aws_video_transcripts_prefix:
+
+# cielo24 api urls
+cielo24_api_base_url:
 
 # ---
 # email vars
@@ -48,8 +58,16 @@ veda_noreply_email:
 admin_email:
 
 # ---
-# VEDA API
+# VAL user creds
 # ---
+val_api_url:
+val_video_images_url:
+val_client_id:
+val_password:
+val_secret_key:
+val_token_url:
+val_username:
+
 ## VEDA API Auth
 veda_api_url:
 veda_auth_url:
@@ -58,29 +76,18 @@ veda_secret_key:
 veda_token_url:
 
 # ---
-# VAL
+## Celery Info
 # ---
-val_api_url:
-val_token_url:
-val_video_images_url:
-# Credentials
-val_client_id:
-val_secret_key:
-val_password:
-val_username:
-
-# ---
-# Celery Info
-# ---
-celery_app_name: veda_production
+celery_app_name:
 # can do multiple queues like so: foo,bar,baz
 main_celery_queue: encode_worker
-celery_receiver_queue: encode_worker
+largefile_queue_barrier: 1000000000
 largefile_celery_queue: large_encode_worker
 celery_stat_queue: transcode_stat
-largefile_queue_barrier: 1000000000
-celery_threads: 1
+celery_receiver_queue: encode_worker,large_encode_worker
+celery_threads:
 
+## CLOUD
 rabbitmq_broker:
 rabbitmq_pass:
 rabbitmq_user:
@@ -99,10 +106,6 @@ threeplay_ftphost:
 xuetang_api_url:
 xuetang_api_shared_secret:
 
-## Encoding Config
-ffmpeg_compiled: "ffmpeg"
-ffprobe_compiled: "ffprobe"
-target_aspect_ratio: 1.7777778
 
 # ----------
 ##---
@@ -153,10 +156,5 @@ val_profile_dict:
     review:
     hls:
         - hls
-
-#--
-# Heal settings
-heal_start: 1
-heal_end: 144
 
 ...

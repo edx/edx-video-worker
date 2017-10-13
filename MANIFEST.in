@@ -1,5 +1,4 @@
 include README.rst
-include default_config.yaml
 include instance_config.yaml
 include default_encode_profiles.json
 include test_videofiles/*.mp4
