@@ -160,7 +160,7 @@ class VideoWorker(object):
             encode_profile = self.encode_profile
             deliverable_route.apply_async(
                 (veda_id, encode_profile),
-                queue='transcode_stat'
+                queue=self.settings['celery_deliver_queue']
             )
         # Clean up workdir
         if self.jobid is not None:

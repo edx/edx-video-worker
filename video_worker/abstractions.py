@@ -154,13 +154,20 @@ class Encode(object):
         self.encode_library = None
 
     def pull_data(self):
-        if self.VideoObject.veda_id is not None:
-            veda_token = generate_apitoken.veda_tokengen()
-            if veda_token is None:
-                ErrorObject().print_error(
+        """
+        Retrieve Active and latest encode data from central VEDA node
+        """
+        # TODO: Change retrieval to a scheduled/delay process
+        if self.VideoObject.veda_id is None:
+            self._default_encodes()
+            return
+
+        veda_token = generate_apitoken.veda_tokengen()
+        if veda_token is None:
+            ErrorObject().print_error(
                     message="VEDA Token Generate"
                 )
-                return None
+            return None
 
             data = {'product_spec': self.profile_name}
 
@@ -190,20 +197,19 @@ class Encode(object):
                     self.encode_pk = e['id']
 
             if self.encode_suffix is None:
-                ErrorObject().print_error(
-                    message="VEDA API Encode Data Fail: No Suffix"
-                )
-                return None
-        else:
-            '''
-            filetype': u'mp4', u'encode_suffix': u'DTH', u'resolution': 720, u'rate_factor'
-            '''
-            encode_data = self._read_encodes()
-            self.resolution = encode_data[self.profile_name]['resolution']
-            self.rate_factor = encode_data[self.profile_name]['rate_factor']
-            self.filetype = encode_data[self.profile_name]['filetype']
-            self.encode_suffix = encode_data[self.profile_name]['encode_suffix']
-            self.encode_pk = None
+                # In the case of an API Error
+                self._default_encodes()
+
+    def _default_encodes(self):
+        """
+        filetype': u'mp4', u'encode_suffix': u'DTH', u'resolution': 720, u'rate_factor'
+        """
+        encode_data = self._read_encodes()
+        self.resolution = encode_data[self.profile_name]['resolution']
+        self.rate_factor = encode_data[self.profile_name]['rate_factor']
+        self.filetype = encode_data[self.profile_name]['filetype']
+        self.encode_suffix = encode_data[self.profile_name]['encode_suffix']
+        self.encode_pk = None
 
     def _read_encodes(self):
         if self.encode_library is None:
