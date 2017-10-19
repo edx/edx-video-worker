@@ -20,13 +20,7 @@
             "rate_factor":27,
             "filetype":"mp4"
         },
-        "mobile_high":{  
-            "encode_suffix":"MB1",
-            "resolution":540,
-            "rate_factor":27,
-            "filetype":"mp4"
-        },
-        "desktop_mp4":{  
+        "desktop_mp4":{
             "encode_suffix":"DTH",
             "resolution":720,
             "rate_factor":27,
