@@ -174,7 +174,12 @@ class VideoWorker(object):
             return
 
         self._execute_encode()
-        self._validate_encode()
+
+        if self.encode_profile == 'audio_mp3':
+            self.encoded = True
+        else:
+            self._validate_encode()
+
         if self.encoded and self.VideoObject.veda_id is not None:
             self._deliver_file()
 

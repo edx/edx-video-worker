@@ -169,36 +169,40 @@ class Encode(object):
                 )
             return None
 
-            data = {'product_spec': self.profile_name}
+        data = {'product_spec': self.profile_name}
 
-            headers = {
-                'Authorization': 'Token ' + veda_token,
-                'content-type': 'application/json'
-            }
-            x = requests.get(
-                '/'.join((settings['veda_api_url'], 'encodes')),
-                params=data,
-                headers=headers
+        headers = {
+            'Authorization': 'Token ' + veda_token,
+            'content-type': 'application/json'
+        }
+        x = requests.get(
+            '/'.join((settings['veda_api_url'], 'encodes')),
+            params=data,
+            headers=headers
+        )
+        if x.status_code > 250:
+            self._default_encodes()
+            return
+
+        enc_dict = json.loads(x.text)
+
+        if len(enc_dict['results']) == 0:
+            ErrorObject().print_error(
+                message="VEDA API Encode Mismatch: No Data"
             )
-            enc_dict = json.loads(x.text)
+            return None
 
-            if len(enc_dict['results']) == 0:
-                ErrorObject().print_error(
-                    message="VEDA API Encode Mismatch: No Data"
-                )
-                return None
+        for e in enc_dict['results']:
+            if e['product_spec'] == self.profile_name and e['profile_active'] is True:
+                self.resolution = e['encode_resolution']
+                self.rate_factor = e['encode_bitdepth']
+                self.filetype = e['encode_filetype']
+                self.encode_suffix = e['encode_suffix']
+                self.encode_pk = e['id']
 
-            for e in enc_dict['results']:
-                if e['product_spec'] == self.profile_name and e['profile_active'] is True:
-                    self.resolution = e['encode_resolution']
-                    self.rate_factor = e['encode_bitdepth']
-                    self.filetype = e['encode_filetype']
-                    self.encode_suffix = e['encode_suffix']
-                    self.encode_pk = e['id']
-
-            if self.encode_suffix is None:
-                # In the case of an API Error
-                self._default_encodes()
+        if self.encode_suffix is None:
+            # In the case of an API Error
+            self._default_encodes()
 
     def _default_encodes(self):
         """
