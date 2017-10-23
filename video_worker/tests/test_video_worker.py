@@ -82,17 +82,6 @@ class VideoWorkerTest(unittest.TestCase):
         )
         self.assertEqual(VW.workdir, expected_workdir)
 
-    @data(True, False)
-    @patch('nose.run')
-    def test_video_worker_test(self, nose_result, mock_nose):
-        """
-        Test `test` method works correctly.
-        """
-        # Mock nose.run
-        mock_nose.return_value = nose_result
-        result = self.VW.test()
-        self.assertEqual(result, nose_result)
-
     @data(
         (
             {
@@ -116,7 +105,7 @@ class VideoWorkerTest(unittest.TestCase):
         (
             {
                 'encode_profile': 'static-pipeline',
-                'path_exists': False
+                'exists_side_effects': [True, False]
             }
         ),
         # Success
@@ -162,7 +151,7 @@ class VideoWorkerTest(unittest.TestCase):
 
         # First 2 calls to os.path.exists will be called in WS.run() so we need to make sure our TEST_INSTANCE_YAML
         # file path is check correctly.
-        mock_exists.side_effect = [True, True, path_exists]
+        mock_exists.side_effect = mock_data.get('exists_side_effects', [True, True, True])
 
         video_images_setup_mock.return_value = WS.settings_dict
 

@@ -1,11 +1,4 @@
 ---
-
-#--
-# Global settings
-heal_start: 1
-heal_end: 144
-global_timeout: 40
-
 # ---
 # Database information
 # ---
@@ -88,9 +81,9 @@ celery_receiver_queue: encode_worker,large_encode_worker
 celery_threads:
 
 ## CLOUD
-rabbitmq_broker:
-rabbitmq_pass:
-rabbitmq_user:
+rabbitmq_broker: ""
+rabbitmq_pass: ""
+rabbitmq_user: ""
 
 # ---
 # Shotgun Variables (internal mediateam)
@@ -138,7 +131,6 @@ val_profile_dict:
     override:
         - desktop_mp4
         - mobile_low
-        - mobile_high
 
     audio_mp3:
         - audio_mp3
@@ -148,5 +140,14 @@ val_profile_dict:
     review:
     hls:
         - hls
+
+
+#--
+# Global settings
+heal_start: 3
+heal_end: 144
+global_timeout: 40
+ffmpeg_compiled: 'ffmpeg'
+ffprobe_compiled: 'ffprobe'
 
 ...
