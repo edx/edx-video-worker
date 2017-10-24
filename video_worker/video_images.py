@@ -2,22 +2,23 @@
 Generate 3 images for a course video.
 """
 
-from boto.exception import S3ResponseError
-from boto.s3.connection import S3Connection
-from boto.s3.key import Key
 import json
 import logging
 import math
 import os
-from os.path import expanduser
-import requests
 import subprocess
+from os.path import expanduser
 from uuid import uuid4
 
-import generate_apitoken
-from video_worker.reporting import ErrorObject
-from video_worker.config import WorkerSetup
+import requests
+from boto.exception import S3ResponseError
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
 
+import generate_apitoken
+from video_worker.config import WorkerSetup
+from video_worker.reporting import ErrorObject
+from video_worker.utils import build_url
 
 HOME_DIR = expanduser("~")
 IMAGE_COUNT = 3
@@ -140,9 +141,9 @@ class VideoImages(object):
         image_keys = []
         for generated_image in generated_images:
             upload_key = Key(bucket)
-            upload_key.key = '{prefix}/{generated_image}'.format(
-                prefix=self.settings['aws_video_images_prefix'],
-                generated_image=os.path.basename(generated_image)
+            upload_key.key = build_url(
+                self.settings['aws_video_images_prefix'],
+                os.path.basename(generated_image)
             )
             image_keys.append(upload_key.key)
             upload_key.set_contents_from_filename(generated_image)

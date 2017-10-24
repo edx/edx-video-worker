@@ -4,3 +4,4 @@ Pillow==3.4
 pep8==1.7.0
 coverage==4.2
 edx-lint==0.5.4
+moto==1.0.1

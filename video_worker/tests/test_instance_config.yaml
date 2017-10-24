@@ -22,7 +22,13 @@ edx_s3_ingest_bucket: 'dummy-ingest-bucket'
 edx_s3_endpoint_bucket: 'dummy-endpoint-bucket'
 edx_cloudfront_prefix: 'dummy-cf-prefix'
 aws_video_images_bucket: 'dummy-images-bucket'
-aws_video_images_prefix: "video-images/"
+aws_video_images_prefix: 'video-images/'
 veda_s3_upload_bucket: 'dummy-upload-bucket'
 veda_s3_hotstore_bucket: 'dummy-hotstore-bucket'
 veda_deliverable_bucket: 'dummy-deliverable-bucket'
+
+ffmpeg_compiled: 'ffmpeg'
+val_client_id:  None
+val_video_images_url: 'https://www.testimg.com/update/images'
+aws_video_images_prefix: 'video-images/'
+aws_video_images_bucket: 'imagesbucket'
