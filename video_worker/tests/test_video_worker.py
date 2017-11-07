@@ -140,7 +140,6 @@ class VideoWorkerTest(unittest.TestCase):
         is_valid_engine_intake = mock_data.get('is_valid_engine_intake', True)
         error_message = mock_data.get('error_message', '')
         encoded_profile = mock_data.get('encode_profile', None)
-        path_exists = mock_data.get('path_exists', True)
 
         self.VW.instance_yaml = TEST_INSTANCE_YAML
         self.VW.settings = WS.settings_dict
@@ -191,7 +190,7 @@ class VideoWorkerTest(unittest.TestCase):
                 # Call VideoWorker run method.
                 self.VW.run()
 
-        if not path_exists:
+        if not mock_exists.side_effect:
             self.assertTrue(mock_mkdir.called)
 
         if error_message:
