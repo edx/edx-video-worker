@@ -105,7 +105,7 @@ class VideoWorkerTest(unittest.TestCase):
         (
             {
                 'encode_profile': 'static-pipeline',
-                'exists_side_effects': [True, False]
+                'path_exists': False
             }
         ),
         # Success
@@ -140,6 +140,7 @@ class VideoWorkerTest(unittest.TestCase):
         is_valid_engine_intake = mock_data.get('is_valid_engine_intake', True)
         error_message = mock_data.get('error_message', '')
         encoded_profile = mock_data.get('encode_profile', None)
+        path_exists = mock_data.get('path_exists', True)
 
         self.VW.instance_yaml = TEST_INSTANCE_YAML
         self.VW.settings = WS.settings_dict
@@ -150,7 +151,7 @@ class VideoWorkerTest(unittest.TestCase):
 
         # First 2 calls to os.path.exists will be called in WS.run() so we need to make sure our TEST_INSTANCE_YAML
         # file path is check correctly.
-        mock_exists.side_effect = mock_data.get('exists_side_effects', [True, True, True])
+        mock_exists.side_effect = [True, True, path_exists] if path_exists else [True, path_exists]
 
         video_images_setup_mock.return_value = WS.settings_dict
 
@@ -185,12 +186,12 @@ class VideoWorkerTest(unittest.TestCase):
         change_video_func = change_video_valid if is_valid else change_video_invalid
         change_video_func_intake = change_video_valid_intake if is_valid_engine_intake else change_video_invalid_intake
 
-        with patch('video_worker.abstractions.Video.activate', new=change_video_func) as mock_video_activate:
-            with patch.object(VideoWorker, '_engine_intake', new=change_video_func_intake) as mock_engine_intake:
+        with patch('video_worker.abstractions.Video.activate', new=change_video_func):
+            with patch.object(VideoWorker, '_engine_intake', new=change_video_func_intake):
                 # Call VideoWorker run method.
                 self.VW.run()
 
-        if not mock_exists.side_effect:
+        if not path_exists:
             self.assertTrue(mock_mkdir.called)
 
         if error_message:
