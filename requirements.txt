@@ -2,8 +2,8 @@ PyYAML==3.11
 boto==2.39.0
 nose==1.3.3
 requests==2.10.0
-celery==3.1.18
+celery==4.1.0
 newrelic
 # TODO! https://openedx.atlassian.net/browse/EDUCATOR-2279
 # this way is required when installing using `pip install requirements.txt` so that `encode_profiles.json` is accessible
--e git+https://github.com/yro/chunkey.git@14f9c330d4ba5a4290dd0d17429b142618bc2c9f#egg=chunkey
+-e git+https://github.com/yro/chunkey.git@f659c95552413d340ccab7bd27e8d63a874fd316#egg=chunkey

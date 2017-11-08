@@ -5,7 +5,7 @@ Globals
 """
 
 import os
-
+from os.path import expanduser
 from video_worker.utils import get_config, ROOT_DIR
 
 DEFAULT_ENCODE_WORK_DIR = os.path.join(ROOT_DIR, 'ENCODE_WORKDIR')
@@ -28,7 +28,7 @@ HLS_SUBSTITUTE = 'mobile_low'
 
 # For BOTO Multipart uploader
 MULTI_UPLOAD_BARRIER = 2000000000
-BOTO_TIMEOUT = 60
+BOTO_TIMEOUT = '60'
 
 # Settings for testing
 TEST_VIDEO_DIR = os.path.join(
@@ -42,3 +42,5 @@ NODE_COLORS_BLUE = '\033[94m'
 NODE_COLORS_GREEN = '\033[92m'
 NODE_COLORS_RED = '\033[91m'
 NODE_COLORS_END = '\033[0m'
+
+HOME_DIR = expanduser("~")
