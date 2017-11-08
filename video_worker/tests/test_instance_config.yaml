@@ -27,8 +27,14 @@ veda_s3_upload_bucket: 'dummy-upload-bucket'
 veda_s3_hotstore_bucket: 'dummy-hotstore-bucket'
 veda_deliverable_bucket: 'dummy-deliverable-bucket'
 
-ffmpeg_compiled: 'ffmpeg'
 val_client_id:  None
 val_video_images_url: 'https://www.testimg.com/update/images'
 aws_video_images_prefix: 'video-images/'
 aws_video_images_bucket: 'imagesbucket'
+
+# Celery
+celery_deliver_queue: ""
+
+#--
+# Global settings
+global_timeout: 40

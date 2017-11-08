@@ -92,9 +92,6 @@ class VideoWorker(object):
         WS = WorkerSetup(
             instance_yaml=self.instance_yaml
         )
-        if self.setup:
-            WS.setup = True
-
         WS.run()
         self.settings = WS.settings_dict
 

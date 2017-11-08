@@ -200,9 +200,9 @@ class Encode(object):
                 self.encode_suffix = e['encode_suffix']
                 self.encode_pk = e['id']
 
-        if self.encode_suffix is None:
-            # In the case of an API Error
-            self._default_encodes()
+                if self.encode_suffix is None:
+                    # In the case of an API Error
+                    self._default_encodes()
 
     def _default_encodes(self):
         """

@@ -18,8 +18,6 @@ install:
 script: video_worker
 
 script:
-  - python tests/test_api_connect.py
-  - python tests/test_build.py
   - make validate
 
 after_success:

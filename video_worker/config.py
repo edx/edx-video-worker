@@ -6,6 +6,7 @@ based on variables within
 
 import logging
 import os
+import sys
 import yaml
 
 logger = logging.getLogger(__name__)
@@ -24,9 +25,6 @@ class WorkerSetup:
         self.settings_dict = {}
 
     def run(self):
-        """
-        Read Extant Settings or Generate New Ones
-        """
         if not os.path.exists(self.instance_yaml):
             logger.error('Not Configured')
             return
@@ -34,6 +32,6 @@ class WorkerSetup:
         with open(self.instance_yaml, 'r') as stream:
             try:
                 self.settings_dict = yaml.load(stream)
-            except yaml.YAMLError as exc:
+            except yaml.YAMLError:
                 logger.error('Config YAML read error')
                 return

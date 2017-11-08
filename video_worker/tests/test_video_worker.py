@@ -82,17 +82,6 @@ class VideoWorkerTest(unittest.TestCase):
         )
         self.assertEqual(VW.workdir, expected_workdir)
 
-    @data(True, False)
-    @patch('nose.run')
-    def test_video_worker_test(self, nose_result, mock_nose):
-        """
-        Test `test` method works correctly.
-        """
-        # Mock nose.run
-        mock_nose.return_value = nose_result
-        result = self.VW.test()
-        self.assertEqual(result, nose_result)
-
     @data(
         (
             {
@@ -162,7 +151,7 @@ class VideoWorkerTest(unittest.TestCase):
 
         # First 2 calls to os.path.exists will be called in WS.run() so we need to make sure our TEST_INSTANCE_YAML
         # file path is check correctly.
-        mock_exists.side_effect = [True, True, path_exists]
+        mock_exists.side_effect = [True, True, path_exists] if path_exists else [True, path_exists]
 
         video_images_setup_mock.return_value = WS.settings_dict
 
@@ -197,8 +186,8 @@ class VideoWorkerTest(unittest.TestCase):
         change_video_func = change_video_valid if is_valid else change_video_invalid
         change_video_func_intake = change_video_valid_intake if is_valid_engine_intake else change_video_invalid_intake
 
-        with patch('video_worker.abstractions.Video.activate', new=change_video_func) as mock_video_activate:
-            with patch.object(VideoWorker, '_engine_intake', new=change_video_func_intake) as mock_engine_intake:
+        with patch('video_worker.abstractions.Video.activate', new=change_video_func):
+            with patch.object(VideoWorker, '_engine_intake', new=change_video_func_intake):
                 # Call VideoWorker run method.
                 self.VW.run()
 
