@@ -10,20 +10,15 @@ from boto.exception import S3ResponseError
 from boto.s3.key import Key
 import hashlib
 import os
-from os.path import expanduser
 import sys
 import shutil
 
-from global_vars import MULTI_UPLOAD_BARRIER
+from global_vars import MULTI_UPLOAD_BARRIER, ENCODE_WORK_DIR
 from reporting import ErrorObject
-from config import WorkerSetup
+from video_worker.utils import get_config
 
-homedir = expanduser("~")
 
-WS = WorkerSetup()
-if os.path.exists(WS.instance_yaml):
-    WS.run()
-settings = WS.settings_dict
+settings = get_config()
 
 
 class Deliverable():
@@ -45,14 +40,10 @@ class Deliverable():
         """
         if self.workdir is None:
             if self.jobid is None:
-                self.workdir = os.path.join(
-                    homedir,
-                    'ENCODE_WORKDIR'
-                )
+                self.workdir = ENCODE_WORK_DIR
             else:
                 self.workdir = os.path.join(
-                    homedir,
-                    'ENCODE_WORKDIR',
+                    ENCODE_WORK_DIR,
                     self.jobid
                 )
 

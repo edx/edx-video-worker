@@ -1,54 +1,18 @@
 ---
-# ---
-# Database information
-# ---
-## PRODUCTION
-DATABASES:
-    default:
-        ENGINE: 'django.db.backends.mysql'
-        NAME: ""
-        USER: ''
-        PASSWORD: ''
-        HOST: ''
-        PORT: '3306'
 
-# SANDBOX
-#DATABASES:
-#    default:
-#        ENGINE: django.db.backends.sqlite3
-#        NAME: sandbox.db
-
-django_secret_key: ""
-
-debug: false
 # ---
 # AWS
 # ---
-veda_s3_upload_bucket:
 veda_s3_hotstore_bucket:
 veda_deliverable_bucket:
-veda_upload_bucket:
-edx_s3_ingest_prefix: ''
-multi_upload_barrier: 2000000000
-edx_s3_ingest_bucket:
 edx_s3_endpoint_bucket:
-edx_cloudfront_prefix:
 aws_video_images_bucket:
 aws_video_images_prefix: ''
 
-veda_base_url:
-
-aws_video_transcripts_bucket:
-aws_video_transcripts_prefix:
-
-# cielo24 api urls
-cielo24_api_base_url:
-
 # ---
-# email vars
+# Celery
 # ---
-veda_noreply_email:
-admin_email:
+celery_threads: 1
 
 # ---
 # VAL user creds
@@ -68,86 +32,7 @@ veda_client_id:
 veda_secret_key:
 veda_token_url:
 
-# ---
-## Celery Info
-# ---
-celery_app_name:
-# can do multiple queues like so: foo,bar,baz
-main_celery_queue: encode_worker
-largefile_queue_barrier: 1000000000
-largefile_celery_queue: large_encode_worker
-celery_stat_queue: transcode_stat
-celery_receiver_queue: encode_worker,large_encode_worker
-celery_threads:
-
 ## CLOUD
 rabbitmq_broker: ""
 rabbitmq_pass: ""
 rabbitmq_user: ""
-
-# ---
-# Shotgun Variables (internal mediateam)
-# ---
-sg_server_path:
-sg_script_name:
-sg_script_key:
-
-# ---
-# Endpoints
-# ---
-threeplay_ftphost:
-xuetang_api_url:
-xuetang_api_shared_secret:
-
-
-# ----------
-##---
-# This is a list of encodes and their respective course
-# boolean matches
-encode_dict:
-    review_proc:
-        - review
-    mobile_override:
-        - override
-    s3_proc:
-        - mobile_low
-        - audio_mp3
-        - desktop_mp4
-        - hls
-
-    yt_proc:
-        - youtube
-
-##---
-# This is a list of encode profiles and their val profile matches
-# boolean matches
-val_profile_dict:
-    mobile_low:
-        - mobile_low
-
-    desktop_mp4:
-        - desktop_mp4
-
-    override:
-        - desktop_mp4
-        - mobile_low
-
-    audio_mp3:
-        - audio_mp3
-
-    youtube:
-        - youtube
-    review:
-    hls:
-        - hls
-
-
-#--
-# Global settings
-heal_start: 3
-heal_end: 144
-global_timeout: 40
-ffmpeg_compiled: 'ffmpeg'
-ffprobe_compiled: 'ffprobe'
-
-...

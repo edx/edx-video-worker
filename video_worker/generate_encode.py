@@ -16,8 +16,8 @@ import logging
 import os
 import sys
 
-from config import WorkerSetup
-from global_vars import HOME_DIR, ENCODE_WORK_DIR, TARGET_ASPECT_RATIO, ENFORCE_TARGET_ASPECT
+from video_worker.utils import get_config
+from global_vars import ENCODE_WORK_DIR, TARGET_ASPECT_RATIO, ENFORCE_TARGET_ASPECT
 
 logger = logging.getLogger(__name__)
 
@@ -33,10 +33,7 @@ class CommandGenerate:
         self.ffcommand = []
 
     def settings_setup(self):
-        WS = WorkerSetup()
-        if os.path.exists(WS.instance_yaml):
-            WS.run()
-        return WS.settings_dict
+        return get_config()
 
     def generate(self):
         """

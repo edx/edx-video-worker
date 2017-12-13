@@ -22,3 +22,6 @@ coverage/
 .coverage
 
 test_videofiles/
+
+### VisualStudioCode ###
+.vscode/*

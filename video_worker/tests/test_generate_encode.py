@@ -11,7 +11,7 @@ from mock import patch
 from video_worker.abstractions import Video, Encode
 from video_worker.global_vars import ENCODE_WORK_DIR, TARGET_ASPECT_RATIO, ENFORCE_TARGET_ASPECT
 from video_worker.generate_encode import CommandGenerate
-from video_worker.tests.utils import create_worker_setup, TEST_INSTANCE_YAML
+from video_worker.tests.utils import TEST_INSTANCE_YAML
 
 
 @ddt
@@ -35,26 +35,6 @@ class CommandGenerateTest(unittest.TestCase):
             VideoObject=self.video,
             EncodeObject=self.encode
         )
-
-    def test_settings_setup(self):
-        """
-        Tests settings_setup works correctly.
-        """
-
-        def change_worker_setup(self):
-            """
-            Sets workerSetup.instance_yaml to TEST_INSTANCE_YAML when WorkerSetup is initiallized.
-            """
-            self.instance_yaml = TEST_INSTANCE_YAML
-            self.setup = False
-
-        # Setup WS.settings_dict
-        WS = create_worker_setup()
-        WS.run()
-
-        with patch('video_worker.config.WorkerSetup.__init__', new=change_worker_setup) as ws_mock:
-            result_settings_dict = self.command_generate.settings_setup()
-            self.assertEqual(result_settings_dict, WS.settings_dict)
 
     @data(
         (

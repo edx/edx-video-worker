@@ -6,19 +6,15 @@ Start Celery Worker (if VEDA-attached node)
 """
 from celery import Celery
 import os
-from os.path import expanduser
 import shutil
 import sys
 
-from video_worker.config import WorkerSetup
+from video_worker.utils import get_config
+from video_worker.global_vars import ENCODE_WORK_DIR
 
 
-WS = WorkerSetup()
-if os.path.exists(WS.instance_yaml):
-    WS.run()
-settings = WS.settings_dict
+settings = get_config()
 
-homedir = expanduser("~")
 
 
 def cel_Start():
@@ -68,15 +64,13 @@ def worker_task_fire(veda_id, encode_profile, jobid):
     """
     if jobid is not None and os.path.exists(
             os.path.join(
-                homedir,
-                'ENCODE_WORKDIR',
+                ENCODE_WORK_DIR,
                 jobid
             )
     ):
         shutil.rmtree(
             os.path.join(
-                homedir,
-                'ENCODE_WORKDIR',
+                ENCODE_WORK_DIR,
                 jobid
             )
         )

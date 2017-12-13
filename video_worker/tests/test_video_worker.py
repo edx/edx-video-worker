@@ -11,13 +11,13 @@ from mock import Mock, patch
 
 from video_worker import VideoWorker, logger as video_worker_logger, deliverable_route
 from video_worker.abstractions import Video
-from video_worker.global_vars import HOME_DIR, ENCODE_WORK_DIR
+from video_worker.global_vars import ENCODE_WORK_DIR
+from video_worker.utils import get_config
 
-from utils import create_worker_setup, TEST_INSTANCE_YAML
+from utils import TEST_INSTANCE_YAML
 
 
-WS = create_worker_setup()
-WS.run()
+worker_settings = get_config()
 
 
 @ddt
@@ -45,17 +45,14 @@ class VideoWorkerTest(unittest.TestCase):
         {
             'jobid': 'dummy-job-id',
             'workdir': '',
-            'instance_yaml': '',
         },
         {
             'jobid': 'dummy-job-id',
             'workdir': '',
-            'instance_yaml': 'dummy-instance_yaml.yaml',
         },
         {
             'jobid': 'dummy-job-id',
             'workdir': '/dummy-work-dir',
-            'instance_yaml': 'dummy-instance_yaml.yaml',
         }
     )
     def test_video_worker(self, data):
@@ -63,16 +60,6 @@ class VideoWorkerTest(unittest.TestCase):
         Tests video worker object is created with correct values.
         """
         VW = VideoWorker(**data)
-
-        # Verify instance_yaml has correct value
-        expected_instance_yaml = data.get(
-            'instance_yaml',
-            os.path.join(
-                os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-                'instance_config.yaml'
-            )
-        )
-        self.assertEqual(VW.instance_yaml, expected_instance_yaml)
 
         # Verify that workdir has correct value
         job_id = data.get('jobid', None)
@@ -142,8 +129,7 @@ class VideoWorkerTest(unittest.TestCase):
         encoded_profile = mock_data.get('encode_profile', None)
         path_exists = mock_data.get('path_exists', True)
 
-        self.VW.instance_yaml = TEST_INSTANCE_YAML
-        self.VW.settings = WS.settings_dict
+        self.VW.settings = worker_settings
         self.VW.encode_profile = encoded_profile
         self.VW.VideoObject.valid = is_valid
         self.VW.jobid = 'dummy-jobid'
@@ -153,7 +139,7 @@ class VideoWorkerTest(unittest.TestCase):
         # file path is check correctly.
         mock_exists.side_effect = [True, True, path_exists] if path_exists else [True, path_exists]
 
-        video_images_setup_mock.return_value = WS.settings_dict
+        video_images_setup_mock.return_value = worker_settings
 
         def change_video_valid(self):
             """
@@ -190,9 +176,6 @@ class VideoWorkerTest(unittest.TestCase):
             with patch.object(VideoWorker, '_engine_intake', new=change_video_func_intake):
                 # Call VideoWorker run method.
                 self.VW.run()
-
-        if not path_exists:
-            self.assertTrue(mock_mkdir.called)
 
         if error_message:
             mock_logger.assert_called_with(error_message)
@@ -288,12 +271,12 @@ class VideoWorkerTest(unittest.TestCase):
             self.manifest_url = '/dummy-manifest-url'
 
         # Add dummy s3 bucket info to settings.
-        WS.settings_dict.update({
+        worker_settings.update({
             'edx_s3_endpoint_bucket': 'dummy-edx_s3_endpoint_bucket',
             'edx_access_key_id': 'dummy-edx_access_key_id',
             'edx_secret_access_key': 'dummy-edx_secret_access_key',
         })
-        self.VW.settings = WS.settings_dict
+        self.VW.settings = worker_settings
 
         self.assertIsNone(self.VW.endpoint_url)
 
@@ -376,10 +359,10 @@ class VideoWorkerTest(unittest.TestCase):
             mock_get_bucket.side_effect = S3ResponseError(403, 'Forbidden', 'Dummy S3ResponseError.')
 
         # Add dummy s3 bucket info to settings.
-        WS.settings_dict.update({
+        worker_settings.update({
             'aws_storage_bucket': 'dummy-aws_storage_bucket',
         })
-        self.VW.settings = WS.settings_dict
+        self.VW.settings = worker_settings
 
         self.VW._engine_intake()
 
