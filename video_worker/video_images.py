@@ -7,7 +7,6 @@ import logging
 import math
 import os
 import subprocess
-from os.path import expanduser
 from uuid import uuid4
 
 import requests
@@ -16,11 +15,11 @@ from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 
 import generate_apitoken
-from video_worker.config import WorkerSetup
+from video_worker.utils import get_config
 from video_worker.reporting import ErrorObject
 from video_worker.utils import build_url
 
-HOME_DIR = expanduser("~")
+
 IMAGE_COUNT = 3
 IMAGE_WIDTH = 1280
 IMAGE_HEIGHT = 720
@@ -49,10 +48,7 @@ class VideoImages(object):
         """
         Initialize settings
         """
-        worker_setup = WorkerSetup()
-        if os.path.exists(worker_setup.instance_yaml):
-            worker_setup.run()
-        return worker_setup.settings_dict
+        return get_config()
 
     def create_and_update(self):
         """

@@ -13,7 +13,7 @@ import requests
 
 from reporting import ErrorObject, Output
 import generate_apitoken
-from config import WorkerSetup
+from video_worker.utils import get_config
 from global_vars import *
 from validate import ValidateVideo
 
@@ -21,11 +21,7 @@ from validate import ValidateVideo
 """Disable insecure warning for requests lib"""
 requests.packages.urllib3.disable_warnings()
 
-
-WS = WorkerSetup()
-if os.path.exists(WS.instance_yaml):
-    WS.run()
-settings = WS.settings_dict
+settings = get_config()
 
 
 class Video(object):

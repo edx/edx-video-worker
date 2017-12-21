@@ -11,16 +11,14 @@ from mock import Mock, patch
 
 from video_worker.abstractions import Video
 from video_worker.api_communicate import UpdateAPIStatus
+from video_worker.tests.utils import TEST_INSTANCE_YAML_FILE
+from video_worker.utils import get_config
 
-from utils import create_worker_setup
-
-
-WS = create_worker_setup()
-WS.run()
+WORKER_SETTINGS = get_config(yaml_config_file=TEST_INSTANCE_YAML_FILE)
 
 
 @ddt
-@patch('video_worker.api_communicate.settings', WS.settings_dict)
+@patch('video_worker.api_communicate.settings', WORKER_SETTINGS)
 class ApiCommunicateTest(unittest.TestCase):
     """
     Api Communicate test class.

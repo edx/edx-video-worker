@@ -8,15 +8,13 @@ import logging
 import os
 import requests
 
-from config import WorkerSetup
+from video_worker.utils import get_config
 
 """Disable insecure warning for requests lib"""
 requests.packages.urllib3.disable_warnings()
 
-WS = WorkerSetup()
-if os.path.exists(WS.instance_yaml):
-    WS.run()
-settings = WS.settings_dict
+
+settings = get_config()
 
 
 logger = logging.getLogger(__name__)

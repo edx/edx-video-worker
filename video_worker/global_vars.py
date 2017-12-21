@@ -5,10 +5,12 @@ Globals
 """
 
 import os
-import sys
 
-HOME_DIR = os.path.expanduser('~')
-ENCODE_WORK_DIR = os.path.join(HOME_DIR, 'ENCODE_WORKDIR')
+from video_worker.utils import get_config, ROOT_DIR
+
+DEFAULT_ENCODE_WORK_DIR = os.path.join(ROOT_DIR, 'ENCODE_WORKDIR')
+WORKER_CONFIG = get_config()
+ENCODE_WORK_DIR = WORKER_CONFIG.get('ENCODE_WORK_DIR', DEFAULT_ENCODE_WORK_DIR)
 
 NODE_TRANSCODE_STATUS = 'Active Transcode'
 VAL_TRANSCODE_STATUS = 'transcode_active'

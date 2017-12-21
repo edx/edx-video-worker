@@ -1,0 +1,25 @@
+---
+# This configuration should only have static settings.
+
+# Celery Info
+celery_app_name: veda_production
+celery_worker_queue: encode_worker,large_encode_worker
+celery_deliver_queue: deliver_worker
+
+# can do multiple queues like so: foo,bar,baz
+main_celery_queue: encode_worker
+largefile_queue_barrier: 1000000000
+largefile_celery_queue: large_encode_worker
+celery_stat_queue: transcode_stat
+celery_receiver_queue: encode_worker,large_encode_worker
+
+# Encoding Config
+ffmpeg_compiled: "ffmpeg"
+ffprobe_compiled: "ffprobe"
+target_aspect_ratio: 1.7777778
+
+# Heal settings
+heal_start: 1
+heal_end: 144
+
+global_timeout: 40

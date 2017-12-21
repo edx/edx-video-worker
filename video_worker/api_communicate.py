@@ -11,13 +11,10 @@ import requests
 import sys
 
 import generate_apitoken
-from config import WorkerSetup
+from video_worker.utils import get_config
 
 
-WS = WorkerSetup()
-if os.path.exists(WS.instance_yaml):
-    WS.run()
-settings = WS.settings_dict
+settings = get_config()
 # Disable warning
 requests.packages.urllib3.disable_warnings()
 

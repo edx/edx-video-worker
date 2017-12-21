@@ -16,13 +16,13 @@ from chunkey import Chunkey
 from video_worker.abstractions import Video, Encode
 from video_worker.api_communicate import UpdateAPIStatus
 from celeryapp import deliverable_route
-from video_worker.config import WorkerSetup
 from video_worker.generate_encode import CommandGenerate
 from video_worker.generate_delivery import Deliverable
-from video_worker.global_vars import HOME_DIR, ENCODE_WORK_DIR, VAL_TRANSCODE_STATUS, NODE_TRANSCODE_STATUS
+from video_worker.global_vars import ENCODE_WORK_DIR, VAL_TRANSCODE_STATUS, NODE_TRANSCODE_STATUS
 from video_worker.reporting import Output
 from video_worker.validate import ValidateVideo
 from video_worker.video_images import VideoImages
+from video_worker.utils import get_config
 
 try:
     boto.config.add_section('Boto')
@@ -43,14 +43,6 @@ class VideoWorker(object):
         self.jobid = kwargs.get('jobid', None)
         self.encode_profile = kwargs.get('encode_profile', None)
         self.VideoObject = kwargs.get('VideoObject', None)
-
-        self.instance_yaml = kwargs.get(
-            'instance_yaml',
-            os.path.join(
-                os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                'instance_config.yaml'
-            )
-        )
 
         # Working Dir Config
         self.workdir = kwargs.get('workdir', None)
@@ -89,11 +81,7 @@ class VideoWorker(object):
         return test_bool
 
     def run(self):
-        WS = WorkerSetup(
-            instance_yaml=self.instance_yaml
-        )
-        WS.run()
-        self.settings = WS.settings_dict
+        self.settings = get_config()
 
         if self.encode_profile is None:
             logger.error('[VIDEO_WORKER] No Encode Profile Specified')

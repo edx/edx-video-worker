@@ -21,12 +21,9 @@ import subprocess
 import sys
 
 from reporting import ErrorObject, Output
-from config import WorkerSetup
+from video_worker.utils import get_config
 
-WS = WorkerSetup()
-if os.path.exists(WS.instance_yaml):
-    WS.run()
-settings = WS.settings_dict
+settings = get_config()
 
 
 class ValidateVideo:
