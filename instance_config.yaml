@@ -36,3 +36,5 @@ veda_token_url:
 rabbitmq_broker: ""
 rabbitmq_pass: ""
 rabbitmq_user: ""
+
+instance_prefix: ""

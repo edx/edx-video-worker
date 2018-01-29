@@ -31,6 +31,7 @@ except:
 
 boto.config.set('Boto', 'http_socket_timeout', '10')
 
+logging.basicConfig()
 logger = logging.getLogger(__name__)
 
 

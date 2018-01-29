@@ -23,7 +23,7 @@ def build_url(*urls, **query_params):
     Returns:
         absolute url
     """
-    url = '/'.join(item.strip('/') for item in urls)
+    url = '/'.join(item.strip('/') for item in urls if item)
     if query_params:
         url = '{}?{}'.format(url, urllib.urlencode(query_params))
 

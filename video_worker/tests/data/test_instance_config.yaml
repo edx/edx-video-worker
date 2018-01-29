@@ -38,3 +38,5 @@ celery_deliver_queue: ""
 #--
 # Global settings
 global_timeout: 40
+
+instance_prefix: ""
