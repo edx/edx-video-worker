@@ -138,10 +138,17 @@ class VideoImages(object):
         for generated_image in generated_images:
             upload_key = Key(bucket)
             upload_key.key = build_url(
+                self.settings['instance_prefix'],
                 self.settings['aws_video_images_prefix'],
                 os.path.basename(generated_image)
             )
-            image_keys.append(upload_key.key)
+            # image path is stored in edxval without `instance_prefix`
+            image_keys.append(
+                build_url(
+                    self.settings['aws_video_images_prefix'],
+                    os.path.basename(generated_image)
+                )
+            )
             upload_key.set_contents_from_filename(generated_image)
             upload_key.set_acl('public-read')
 
