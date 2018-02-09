@@ -8,6 +8,7 @@ Meant to enforce a lack of DB connection, so information about sequential IDs in
 
 import logging
 import os
+import subprocess
 import sys
 import yaml
 
@@ -15,6 +16,8 @@ from boto.s3.connection import S3Connection
 from boto.exception import S3ResponseError
 from boto.s3.key import Key
 from os.path import expanduser
+
+from video_worker.reporting import Output
 
 logger = logging.getLogger(__name__)
 homedir = expanduser("~")
@@ -73,7 +76,6 @@ class ForceColorspaceEncode(object):
                 )
                 encoding.run_file()
                 x += 100
-                break
 
 
 class FileReEncode(object):
@@ -140,11 +142,19 @@ class FileReEncode(object):
         sys_cmd += " -crf 27 -movflags faststart {new_filepath}".format(
             new_filepath=new_filepath
         )
-        return_code = os.system(sys_cmd)
-        if return_code != 0:
-            print('[SCRIPT] Encode Error : {code}'.format(code=return_code))
-            return
-        print('[SCRIPT] Encode Complete : {code}'.format(code=return_code))
+
+        Output.status_bar(
+            process=subprocess.Popen(
+                sys_cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                shell=True,
+                universal_newlines=True
+            )
+        )
+        # to be polite
+        print
+        print('[SCRIPT] Encode Complete')
 
     def upload_file(self):
         """
@@ -170,8 +180,8 @@ class FileReEncode(object):
         """
         Delete working files
         """
+        print('[SCRIPT] Cleaning Workdir')
         for file in os.listdir(self.workdir):
-            print file
             os.remove(os.path.join(self.workdir, file))
 
 
