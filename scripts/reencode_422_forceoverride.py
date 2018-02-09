@@ -13,6 +13,7 @@ import yaml
 
 from boto.s3.connection import S3Connection
 from boto.exception import S3ResponseError
+from boto.s3.key import Key
 from os.path import expanduser
 
 logger = logging.getLogger(__name__)
@@ -127,13 +128,16 @@ class FileReEncode(object):
             self.workdir,
             '{file}.mov'.format(file=self.target_file)
         )
+
         new_filepath = os.path.join(
             self.workdir,
             '{file}_MB2.mp4'.format(file=self.target_file)
         )
-        sys_cmd = "ffmpeg -hide_banner -y -i {full_filepath} -pix_fmt yuv420p -c:v libx264 -vf scale=640:360"
+        sys_cmd = "ffmpeg -hide_banner -y -i {full_filepath} -pix_fmt yuv420p -c:v libx264 -vf scale=640:360".format(
+            full_filepath=full_filepath
+        )
         sys_cmd += "-crf 27 -movflags faststart {new_filepath}".format(
-            full_filepath=full_filepath, new_filepath=new_filepath
+            new_filepath=new_filepath
         )
         return_code = os.system(sys_cmd)
         if return_code != 0:
