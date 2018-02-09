@@ -94,10 +94,10 @@ class FileReEncode(object):
 
     def download_file(self):
         """
-        'https://s3.amazonaws.com/veda-hotstore/UBCSC1SC2017-V007900.mov'
-
+        DL file from S3
+        file path pattern:
+            'https://s3.amazonaws.com/veda-hotstore/UBCSC1SC2017-V007900.mov'
         """
-
         conn = S3Connection(
             self.settings['veda_access_key_id'],
             self.settings['veda_secret_access_key']
@@ -123,6 +123,7 @@ class FileReEncode(object):
 
     def encode_file(self):
         """
+        Reencode file to override YUV422
         """
         full_filepath = os.path.join(
             self.workdir,
@@ -136,7 +137,7 @@ class FileReEncode(object):
         sys_cmd = "ffmpeg -hide_banner -y -i {full_filepath} -pix_fmt yuv420p -c:v libx264 -vf scale=640:360".format(
             full_filepath=full_filepath
         )
-        sys_cmd += "-crf 27 -movflags faststart {new_filepath}".format(
+        sys_cmd += " -crf 27 -movflags faststart {new_filepath}".format(
             new_filepath=new_filepath
         )
         return_code = os.system(sys_cmd)
@@ -147,6 +148,7 @@ class FileReEncode(object):
 
     def upload_file(self):
         """
+        Upload file to S3, replace old link.
         """
         conn = S3Connection(
             self.settings['edx_access_key_id'],
@@ -166,8 +168,11 @@ class FileReEncode(object):
 
     def cleanup(self):
         """
+        Delete working files
         """
-        pass
+        for file in os.listdir(self.workdir):
+            print file
+            os.remove(os.path.join(self.workdir, file))
 
 
 def main():
