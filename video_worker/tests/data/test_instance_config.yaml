@@ -40,3 +40,4 @@ celery_deliver_queue: ""
 global_timeout: 40
 
 instance_prefix: ""
+ffmpeg_compiled: "ffmpeg"
