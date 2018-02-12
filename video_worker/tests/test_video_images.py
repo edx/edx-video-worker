@@ -39,6 +39,25 @@ class VideoImagesTest(unittest.TestCase):
         with open(TEST_INSTANCE_YAML, 'r') as stream:
             self.settings = yaml.load(stream)
 
+    @patch.object(video_images.VideoImages, 'generate', return_value = ['a/1.png'])
+    @patch.object(video_images.VideoImages, 'upload', return_value = ['s3://images/a/1.png'])
+    @patch.object(video_images.VideoImages, 'update_val')
+    def test_create_and_update(self, mock_update_val, mock_upload, mock_generate):
+        """
+        Verify that VideoImages.create_and_update method works as expected.
+        """
+        video_images.VideoImages(
+            video_object=MockVideo,
+            work_dir=self.work_dir,
+            source_file=self.source_file,
+            jobid=101,
+            settings=self.settings
+        ).create_and_update()
+
+        self.assertTrue(mock_generate.called)
+        mock_upload.assert_called_with(['a/1.png'])
+        mock_update_val.assert_called_with(['s3://images/a/1.png'])
+
     @data(
         {
             'duration': 10, 'positions': [1, 4, 7],
@@ -57,10 +76,6 @@ class VideoImagesTest(unittest.TestCase):
         """
         self.assertEqual(video_images.VideoImages.calculate_positions(duration), positions)
 
-    @unittest.skipIf(
-        'TRAVIS' in os.environ and os.environ['TRAVIS'] == 'true',
-        'Skipping this test on Travis CI due to unavailability of required ffmpeg version.'
-    )
     def test_generate(self):
         """
         Verify that VideoImages.generate method works as expected.

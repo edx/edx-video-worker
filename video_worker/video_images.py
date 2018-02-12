@@ -91,10 +91,8 @@ class VideoImages(object):
             generated_images.append(
                 os.path.join(self.work_dir, '{}.png'.format(uuid4().hex))
             )
-            command = ('{ffmpeg} -ss {position} -i {video_file} -vf '
-                       r'select="gt(scene\,0.4)",scale={width}:{height}'
-                       ' -vsync 2 -vframes 1 {output_file}'
-                       ' -hide_banner -y'.format(
+            command = ('{ffmpeg} -ss {position} -i {video_file} -y -vf scale={width}:{height}'
+                       ' -vsync 2 -vframes 1 {output_file}'.format(
                            ffmpeg=self.settings['ffmpeg_compiled'],
                            position=position,
                            video_file=self.source_video_file,
