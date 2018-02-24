@@ -13,7 +13,7 @@ Commands are then passed back to the Django node and videos are routed to the ap
 This worker
 
 
-.. image:: https://travis-ci.org/edx/edx-video-worker.svg?branch=build_1
+.. image:: https://travis-ci.org/edx/edx-video-worker.svg?branch=master
     :target: https://travis-ci.org/edx/edx-video-worker
 
 --------------
