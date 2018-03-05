@@ -123,9 +123,9 @@ class VideoImages(object):
         Upload auto generated images to S3.
         """
         s3_connection = S3Connection(
-                self.settings['edx_access_key_id'],
-                self.settings['edx_secret_access_key']
-            )
+            self.settings['edx_access_key_id'],
+            self.settings['edx_secret_access_key']
+        )
         try:
             bucket = s3_connection.get_bucket(self.settings['aws_video_images_bucket'])
         except S3ResponseError:
@@ -158,6 +158,8 @@ class VideoImages(object):
         """
         Update a course video in edxval database for auto generated images.
         """
+        if not image_keys:
+            return
         if len(image_keys) > 0:
 
             for course_id in self.video_object.course_url:
