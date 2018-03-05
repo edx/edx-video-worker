@@ -182,6 +182,8 @@ class VideoWorker(object):
         V1 = Chunkey(
             mezz_file=os.path.join(self.workdir, self.source_file),
             DELIVER_BUCKET=self.settings['edx_s3_endpoint_bucket'],
+            ACCESS_KEY_ID=self.settings['edx_access_key_id'],
+            SECRET_ACCESS_KEY=self.settings['edx_secret_access_key'],
             clean=False
         )
 
@@ -197,7 +199,10 @@ class VideoWorker(object):
             return
 
         if self.source_file is None:
-            conn = S3Connection()
+            conn = S3Connection(
+                self.settings['veda_access_key_id'],
+                self.settings['veda_secret_access_key']
+            )
             try:
                 bucket = conn.get_bucket(self.settings['veda_s3_hotstore_bucket'])
             except S3ResponseError:

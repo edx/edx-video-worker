@@ -84,7 +84,10 @@ class Deliverable():
         node_config MULTI_UPLOAD_BARRIER
         """
         try:
-            conn = boto.connect_s3()
+            conn = boto.connect_s3(
+                settings['veda_access_key_id'],
+                settings['veda_secret_access_key']
+                )
             delv_bucket = conn.get_bucket(settings['veda_deliverable_bucket'])
 
         except S3ResponseError:
@@ -130,7 +133,10 @@ class Deliverable():
 
         # Connect to s3
         try:
-            c = boto.connect_s3()
+            c = boto.connect_s3(
+                    settings['veda_access_key_id'],
+                    settings['veda_secret_access_key']
+                )
             b = c.lookup(settings['veda_deliverable_bucket'])
         except S3ResponseError:
             ErrorObject().print_error(
