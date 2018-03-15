@@ -14,9 +14,6 @@ from video_worker.abstractions import Video
 from video_worker.global_vars import ENCODE_WORK_DIR
 from video_worker.utils import get_config
 
-from utils import TEST_INSTANCE_YAML
-
-
 worker_settings = get_config()
 
 

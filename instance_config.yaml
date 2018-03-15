@@ -1,40 +1,63 @@
 ---
+## NOTE!
+# NEVER COMMIT A SECRET HERE!
+#
+# This file is meant as a guide, but should not be assumed to deploy to production.
+# To deploy changes to this file to production,
+# change in @edx/veda-secure/shared/instance_config.yaml
+#
+#
 
-# ---
-# AWS
-# ---
-veda_s3_hotstore_bucket:
-veda_deliverable_bucket:
-edx_s3_endpoint_bucket:
-aws_video_images_bucket:
-aws_video_images_prefix: ''
+# ----------
+onsite_worker: False
+veda_s3_hotstore_bucket: ""
+##---
+# This is a list of encodes and their respective course
+# boolean matches
+encode_dict:
+    review_proc:
+        - review
+    mobile_override:
+        - override
+    s3_proc:
+        - mobile_low
+        - audio_mp3
+        - desktop_mp4
+        - hls
 
-# ---
-# Celery
-# ---
-celery_threads: 1
+    yt_proc:
+        - youtube
 
-# ---
-# VAL user creds
-# ---
-val_api_url:
-val_video_images_url:
-val_client_id:
-val_password:
-val_secret_key:
-val_token_url:
-val_username:
+##---
+# This is a list of encode profiles and their val profile matches
+# boolean matches
+val_profile_dict:
+    mobile_low:
+        - mobile_low
 
-## VEDA API Auth
-veda_api_url:
-veda_auth_url:
-veda_client_id:
-veda_secret_key:
-veda_token_url:
+    desktop_mp4:
+        - desktop_mp4
 
-## CLOUD
-rabbitmq_broker: ""
-rabbitmq_pass: ""
-rabbitmq_user: ""
+    override:
+        - desktop_mp4
+        - mobile_low
 
-instance_prefix: ""
+    audio_mp3:
+        - audio_mp3
+
+    youtube:
+        - youtube
+    review:
+    hls:
+        - hls
+
+
+#--
+# Global settings
+heal_start: 3
+heal_end: 144
+global_timeout: 40
+ffmpeg_compiled: 'ffmpeg'
+ffprobe_compiled: 'ffprobe'
+
+...

@@ -122,7 +122,13 @@ class VideoImages(object):
         """
         Upload auto generated images to S3.
         """
-        s3_connection = S3Connection()
+        if self.settings['onsite_worker'] is True:
+            s3_connection = S3Connection(
+                self.settings['edx_access_key_id'],
+                self.settings['edx_secret_access_key']
+            )
+        else:
+            s3_connection = S3Connection()
 
         try:
             bucket = s3_connection.get_bucket(self.settings['aws_video_images_bucket'])

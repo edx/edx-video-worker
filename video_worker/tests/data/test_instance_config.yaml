@@ -1,6 +1,9 @@
 #---#
 # Test instance_config for edx-video-worker
 #---#
+# Onsite
+onsite_worker: False
+
 # VEDA credentials
 veda_api_url: 'http://dummy-veda-api-url'
 veda_token_url: 'http://dummy-veda-token-url'

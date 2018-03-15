@@ -83,15 +83,14 @@ class Deliverable():
         Upload single part (under threshold in node_config)
         node_config MULTI_UPLOAD_BARRIER
         """
-        try:
-            conn = boto.connect_s3()
-            delv_bucket = conn.get_bucket(settings['veda_deliverable_bucket'])
-
-        except S3ResponseError:
-            ErrorObject().print_error(
-                message='Deliverable Fail: s3 Connection Error - Singleton'
+        if settings['onsite_worker'] is True:
+            conn = boto.connect_s3(
+                settings['veda_access_key_id'],
+                settings['veda_secret_access_key']
             )
-            return False
+        else:
+            conn = boto.connect_s3()
+        delv_bucket = conn.get_bucket(settings['veda_deliverable_bucket'])
 
         upload_key = Key(delv_bucket)
         upload_key.key = self.output_file
@@ -129,14 +128,14 @@ class Deliverable():
         sys.stdout.flush()
 
         # Connect to s3
-        try:
-            c = boto.connect_s3()
-            b = c.lookup(settings['veda_deliverable_bucket'])
-        except S3ResponseError:
-            ErrorObject().print_error(
-                message='Deliverable Fail: s3 Connection Error - Multipart'
+        if settings['onsite_worker'] is True:
+            conn = boto.connect_s3(
+                settings['veda_access_key_id'],
+                settings['veda_secret_access_key']
             )
-            return False
+        else:
+            conn = boto.connect_s3()
+        b = conn.lookup(settings['veda_deliverable_bucket'])
 
         if b is None:
             ErrorObject().print_error(

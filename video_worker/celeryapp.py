@@ -7,7 +7,6 @@ Start Celery Worker (if VEDA-attached node)
 from celery import Celery
 import os
 import shutil
-import sys
 
 from video_worker.utils import get_config
 from video_worker.global_vars import ENCODE_WORK_DIR
@@ -16,16 +15,12 @@ from video_worker.global_vars import ENCODE_WORK_DIR
 settings = get_config()
 
 
-
-def cel_Start():
+def cel_start():
     app = Celery(
         settings.setdefault('celery_app_name', ''),
         broker='amqp://' + settings.setdefault('rabbitmq_user', '') +
                ':' + settings.setdefault('rabbitmq_pass', '') +
                '@' + settings.setdefault('rabbitmq_broker', '') + ':5672//',
-        backend='amqp://' + settings.setdefault('rabbitmq_user', '') +
-                ':' + settings.setdefault('rabbitmq_pass', '') +
-                '@' + settings.setdefault('rabbitmq_broker', '') + ':5672//',
         include=['celeryapp']
     )
 
@@ -34,13 +29,20 @@ def cel_Start():
         CELERY_IGNORE_RESULT=True,
         CELERY_TASK_RESULT_EXPIRES=10,
         CELERYD_PREFETCH_MULTIPLIER=1,
-        CELERY_ACCEPT_CONTENT=['pickle', 'json', 'msgpack', 'yaml']
+        CELERY_ACCEPT_CONTENT=['json'],
+        CELERY_TASK_PUBLISH_RETRY=True,
+        CELERY_TASK_PUBLISH_RETRY_POLICY={
+            "max_retries": 3,
+            "interval_start": 0,
+            "interval_step": 1,
+            "interval_max": 5
+        }
     )
 
     return app
 
 
-app = cel_Start()
+app = cel_start()
 
 
 @app.task(name='worker_encode')
@@ -98,5 +100,5 @@ def test_command(message):
 
 
 if __name__ == '__main__':
-    app = cel_Start()
+    app = cel_start()
     app.start()
