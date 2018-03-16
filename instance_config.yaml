@@ -8,6 +8,7 @@
 #
 #
 
+celery_threads: 1
 # ----------
 onsite_worker: False
 veda_s3_hotstore_bucket: ""
