@@ -1,64 +1,115 @@
 ---
-## NOTE!
-# NEVER COMMIT A SECRET HERE!
-#
-# This file is meant as a guide, but should not be assumed to deploy to production.
-# To deploy changes to this file to production,
-# change in @edx/veda-secure/shared/instance_config.yaml
-#
-#
+# ---
+# Database information
+# ---
+DATABASES:
+    default:
+        ENGINE: django.db.backends.sqlite3
+        NAME: sandbox.db
 
+SECRET_KEY: "a_random_string"
+
+FERNET_KEYS: ["a_random_string"]
+
+debug: True
+
+# Frontend S3 Auth
+veda_secret_access_key: A_RANDOM_STRING
+veda_access_key_id: A_RANDOM_STRING
+
+# JWT AUTH settings
+JWT_AUTH:
+  JWT_SECRET_KEY: A_RANDOM_STRING
+  JWT_ISSUER: https://courses.example.com/oauth2
+  JWT_AUDIENCE: A_RANDOM_STRING
+  JWT_VERIFY_AUDIENCE: true
+
+# ---
+# AWS
+# ---
+# Buckets
+edx_s3_ingest_prefix: '/prefix'
+edx_s3_ingest_bucket: 'dummy-ingest-bucket'
+edx_s3_endpoint_bucket: 'dummy-endpoint-bucket'
+edx_cloudfront_prefix: 'dummy-cf-prefix'
+aws_video_images_bucket: 'dummy-images-bucket'
+aws_video_images_prefix: 'video-images/'
+veda_s3_upload_bucket: 'dummy-upload-bucket'
+veda_s3_hotstore_bucket: 'dummy-hotstore-bucket'
+veda_deliverable_bucket: 'dummy-deliverable-bucket'
+
+veda_upload_bucket: 'dummy-upload-bucket'
+
+s3_base_url: https://s3.amazonaws.com
+veda_base_url: https://veda.example.com
+
+aws_video_transcripts_bucket: 'dummy-transcript-bucket'
+aws_video_transcripts_prefix: video-transcripts/
+
+# ---
+# Endpoints
+# ---
+# cielo24 api urls
+cielo24_api_base_url: https://api.cielo24.com/api
+
+# 3playmedia api urls
+three_play_api_base_url: https://api.3playmedia.com/
+three_play_api_transcript_url: https://static.3playmedia.com/
+threeplay_ftphost: ftp.3playmedia.com
+
+# a token identifying a valid request from transcript provider
+transcript_provider_request_token: A_RANDOM_STRING
+
+# ---
+# email vars
+# ---
+veda_noreply_email: admin@example.com
+admin_email: admin@example.com
+
+lms_base_url: https://courses.example.com
+instance_prefix: ''
+
+# ---
+# VAL user creds
+# ---
+val_api_url: 'http://dummy-val-api-url'
+val_token_url: 'http://dummy-veda-token-url'
+val_client_id: 'dummy-val-client-id'
+val_video_images_url: 'http://dummy-val-api-url'
+val_transcript_create_url: 'http://dummy-val-api-url'
+val_video_transcript_status_url: 'http://dummy-val-api-url'
+val_secret_key: 'dummy-val-secret-key'
+val_username: 'dummy-val-username'
+val_password: 'dummy-val-password'
+
+## VEDA API Auth
+veda_api_url: 'http://dummy-veda-api-url'
+veda_token_url: 'http://dummy-veda-token-url'
+veda_auth_url: 'http://dummy-veda-auth-url'
+veda_client_id: 'dummy-veda-client-id'
+veda_secret_key: 'dummy-veda-secret-key'
+
+# ---
+# Celery Info
+# ---
+celery_app_name: veda_production
+# can do multiple queues like so: foo,bar,baz
+celery_worker_queue: encode_worker
+celery_deliver_queue: deliver_worker
+celery_heal_queue: heal_queue
 celery_threads: 1
-# ----------
+
+rabbitmq_broker: 'localhost'
+rabbitmq_pass: 'celery'
+rabbitmq_user: 'celery'
+
 onsite_worker: False
-veda_s3_hotstore_bucket: ""
-##---
-# This is a list of encodes and their respective course
-# boolean matches
-encode_dict:
-    review_proc:
-        - review
-    mobile_override:
-        - override
-    s3_proc:
-        - mobile_low
-        - audio_mp3
-        - desktop_mp4
-        - hls
 
-    yt_proc:
-        - youtube
-
-##---
-# This is a list of encode profiles and their val profile matches
-# boolean matches
-val_profile_dict:
-    mobile_low:
-        - mobile_low
-
-    desktop_mp4:
-        - desktop_mp4
-
-    override:
-        - desktop_mp4
-        - mobile_low
-
-    audio_mp3:
-        - audio_mp3
-
-    youtube:
-        - youtube
-    review:
-    hls:
-        - hls
-
-
-#--
-# Global settings
-heal_start: 3
-heal_end: 144
-global_timeout: 40
-ffmpeg_compiled: 'ffmpeg'
-ffprobe_compiled: 'ffprobe'
+# ---
+# Shotgun Variables (internal mediateam)
+# ---
+sg_server_path: https://example.com
+sg_script_name: A_RANDOM_STRING
+sg_script_key: A_RANDOM_STRING
 
 ...
