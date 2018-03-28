@@ -149,5 +149,6 @@ class UtilTests(TestCase):
         Tests that utils.get_config works as expected when reading config from environment path.
         """
         with patch('video_worker.utils.STATIC_CONFIG_FILE_PATH', self.static_file_path):
-            instance_config = utils.get_config()
+            with patch('video_worker.utils.DEFAULT_CONFIG_FILE_NAME', self.file_path):
+                instance_config = utils.get_config()
         self.assertDictEqual(instance_config, dict(TEST_CONFIG, **TEST_STATIC_CONFIG))

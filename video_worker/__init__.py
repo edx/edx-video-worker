@@ -38,6 +38,7 @@ except:
 
 boto.config.set('Boto', 'http_socket_timeout', BOTO_TIMEOUT)
 logging.basicConfig(level=logging.INFO)
+logging.getLogger("requests").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
@@ -75,33 +76,20 @@ class VideoWorker(object):
         else:
             return os.path.join(ENCODE_WORK_DIR, self.jobid)
 
-    def test(self):
-        """
-        Run tests
-        """
-        current_dir = os.getcwd()
-
-        test_dir = os.path.join(
-            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-            'tests'
-        )
-        os.chdir(test_dir)
-        test_bool = nose.run()
-
-        # Return to previous state
-        os.chdir(current_dir)
-        return test_bool
-
     def run(self):
         self.settings = get_config()
 
         if self.encode_profile is None:
-            logger.error('[VIDEO_WORKER] No Encode Profile Specified')
+            logger.error('[ENCODE_WORKER] No Encode Profile Specified')
             return
 
         self.VideoObject = Video(
             veda_id=self.veda_id,
         )
+        logger.info('[ENCODE_WORKER] {id} | {encoding} : Ready for Encode'.format(
+            id=self.VideoObject.val_id,
+            encoding=self.encode_profile
+        ))
         if self.source_file is not None:
             self.VideoObject.mezz_filepath = os.path.join(
                 self.workdir,
@@ -110,7 +98,7 @@ class VideoWorker(object):
 
         self.VideoObject.activate()
         if not self.VideoObject.valid:
-            logger.error('[VIDEO_WORKER] Invalid Video / VEDA Data')
+            logger.error('[ENCODE_WORKER] {id} : Invalid Video Data'.format(id=self.VideoObject.val_id))
             return
 
         if not os.path.exists(self.workdir):
@@ -130,7 +118,7 @@ class VideoWorker(object):
         self._engine_intake()
 
         if not self.VideoObject.valid:
-            logger.error('[VIDEO_WORKER] Invalid Video / Local')
+            logger.error('[ENCODE_WORKER] Invalid Video / Local')
             return
 
         if self.VideoObject.val_id is not None:
@@ -152,7 +140,10 @@ class VideoWorker(object):
 
         else:
             self._static_pipeline()
-
+        logger.info('[ENCODE_WORKER] {id} | {encoding} : Encode Complete'.format(
+            id=self.VideoObject.val_id,
+            encoding=self.encode_profile
+        ))
         if self.endpoint_url is not None and self.VideoObject.veda_id is not None:
             # Integrate with main
             veda_id = self.veda_id
@@ -161,6 +152,10 @@ class VideoWorker(object):
                 (veda_id, encode_profile),
                 queue=self.settings['celery_deliver_queue']
             )
+        logger.info('[ENCODE_WORKER] {id} | {encoding} : encoded file queued for delivery'.format(
+            id=self.VideoObject.val_id,
+            encoding=self.encode_profile
+        ))
         # Clean up workdir
         if self.jobid is not None:
             shutil.rmtree(
@@ -187,7 +182,10 @@ class VideoWorker(object):
         Activate HLS, use hls lib to upload
         """
         if not os.path.exists(os.path.join(self.workdir, self.source_file)):
-            logger.error('[VIDEO_WORKER] Source File (local) NOT FOUND - HLS')
+            logger.error('[ENCODE_WORKER] : {id} | {encoding} Local raw video file not found'.format(
+                id=self.VideoObject.val_id,
+                encoding=self.encode_profile
+            ))
             return
 
         os.chdir(self.workdir)
@@ -215,7 +213,9 @@ class VideoWorker(object):
         Copy file down from AWS S3 storage bucket
         """
         if not self.VideoObject.valid:
-            logger.error('[VIDEO_WORKER] Invalid Video')
+            logger.error('[ENCODE_WORKER] : {id} Invalid Video'.format(
+                id=self.VideoObject.val_id,
+            ))
             return
 
         if self.source_file is None:
@@ -229,7 +229,7 @@ class VideoWorker(object):
             try:
                 bucket = conn.get_bucket(self.settings['veda_s3_hotstore_bucket'])
             except S3ResponseError:
-                logger.error('[VIDEO_WORKER] Invalid Storage Bucket')
+                logger.error('[ENCODE_WORKER] Invalid hotstore S3 bucket')
                 return
 
             if self.VideoObject.mezz_extension is not None and len(self.VideoObject.mezz_extension) > 0:
@@ -242,7 +242,9 @@ class VideoWorker(object):
             source_key = bucket.get_key(self.source_file)
 
             if source_key is None:
-                logger.error('[VIDEO_WORKER] S3 Intake Object NOT FOUND')
+                logger.error('[ENCODE_WORKER] : {id} S3 Intake object not found'.format(
+                    id=self.VideoObject.val_id
+                ))
                 return
 
             source_key.get_contents_to_filename(
@@ -250,8 +252,9 @@ class VideoWorker(object):
             )
 
             if not os.path.exists(os.path.join(self.workdir, self.source_file)):
-                logger.error('[VIDEO_WORKER] Engine Intake Download')
-
+                logger.error('[ENCODE_WORKER] : {id} engine intake download error'.format(
+                    id=self.VideoObject.val_id
+                ))
             return
 
         self.VideoObject.valid = ValidateVideo(
@@ -269,18 +272,18 @@ class VideoWorker(object):
         """
         Generate the (shell) command / Encode Object
         """
-        E = Encode(
+        encoding = Encode(
             video_object=self.VideoObject,
             profile_name=self.encode_profile
         )
-        E.pull_data()
+        encoding.pull_data()
 
-        if E.filetype is None:
+        if encoding.filetype is None:
             return
 
         self.ffcommand = CommandGenerate(
             VideoObject=self.VideoObject,
-            EncodeObject=E,
+            EncodeObject=encoding,
             jobid=self.jobid,
             workdir=self.workdir,
             settings=self.settings
@@ -292,11 +295,11 @@ class VideoWorker(object):
         --no need to move the source--
         """
         if not os.path.exists(os.path.join(self.workdir, self.source_file)):
-            logger.error('[VIDEO_WORKER] Source File (local) NOT FOUND - Input')
+            logger.error('[ENCODE_WORKER] : {id} Encode input file not found'.format(
+                id=self.VideoObject.val_id
+            ))
             return
-        print '%s : %s' % (self.VideoObject.veda_id, self.encode_profile)
-        # to be polite
-        print
+
         process = subprocess.Popen(
             self.ffcommand,
             stdout=subprocess.PIPE,
@@ -305,13 +308,12 @@ class VideoWorker(object):
             universal_newlines=True
         )
         Output.status_bar(process=process)
-        # to be polite
-        print
+
         self.output_file = self.ffcommand.split('/')[-1]
-        if not os.path.exists(
-                os.path.join(self.workdir, self.output_file)
-        ):
-            logger.error('[VIDEO_WORKER] Source File (local) NOT FOUND - Output')
+        if not os.path.exists(os.path.join(self.workdir, self.output_file)):
+            logger.error('[ENCODE_WORKER] : {id} Encode output file not found'.format(
+                id=self.VideoObject.val_id
+            ))
 
     def _validate_encode(self):
         """

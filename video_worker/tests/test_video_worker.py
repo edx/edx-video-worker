@@ -69,21 +69,21 @@ class VideoWorkerTest(unittest.TestCase):
     @data(
         (
             {
-                'error_message': '[VIDEO_WORKER] No Encode Profile Specified'
+                'error_message': '[ENCODE_WORKER] No Encode Profile Specified'
             }
         ),
         (
             {
                 'is_valid': False,
                 'encode_profile': 'static-pipeline',
-                'error_message': '[VIDEO_WORKER] Invalid Video / VEDA Data'
+                'error_message': '[ENCODE_WORKER] dummy-val-id : Invalid Video Data'
             }
         ),
         (
             {
                 'is_valid_engine_intake': False,
                 'encode_profile': 'static-pipeline',
-                'error_message': '[VIDEO_WORKER] Invalid Video / Local'
+                'error_message': '[ENCODE_WORKER] Invalid Video / Local'
             }
         ),
         (
@@ -204,7 +204,7 @@ class VideoWorkerTest(unittest.TestCase):
         self.VW._hls_pipeline()
 
         self.assertIsNone(self.VW.endpoint_url)
-        mock_logger.assert_called_with('[VIDEO_WORKER] Source File (local) NOT FOUND - HLS')
+        mock_logger.assert_called_with('[ENCODE_WORKER] : None | None Local raw video file not found')
 
     @data(
         (
@@ -287,28 +287,28 @@ class VideoWorkerTest(unittest.TestCase):
         (
             {
                 'valid_video': False,
-                'error_message': '[VIDEO_WORKER] Invalid Video'
+                'error_message': '[ENCODE_WORKER] : None Invalid Video'
             }
         ),
         (
             {
                 'source_file': None,
                 'mock_get_bucket': False,
-                'error_message': '[VIDEO_WORKER] Invalid Storage Bucket'
+                'error_message': '[ENCODE_WORKER] Invalid hotstore S3 bucket'
             }
         ),
         (
             {
                 'source_file': None,
                 'mock_get_bucket_key': True,
-                'error_message': '[VIDEO_WORKER] S3 Intake Object NOT FOUND'
+                'error_message': '[ENCODE_WORKER] : None S3 Intake object not found'
             }
         ),
         (
             {
                 'source_file': None,
                 'path_exists': False,
-                'error_message': '[VIDEO_WORKER] Engine Intake Download'
+                'error_message': '[ENCODE_WORKER] : None engine intake download error'
             }
         ),
         # Success
@@ -414,13 +414,13 @@ class VideoWorkerTest(unittest.TestCase):
     @data(
         (
             {
-                'error_message': '[VIDEO_WORKER] Source File (local) NOT FOUND - Input'
+                'error_message': '[ENCODE_WORKER] : None Encode input file not found'
             }
         ),
         (
             {
                 'path_exists': [True, False],
-                'error_message': '[VIDEO_WORKER] Source File (local) NOT FOUND - Output'
+                'error_message': '[ENCODE_WORKER] : None Encode output file not found'
             }
         ),
         (

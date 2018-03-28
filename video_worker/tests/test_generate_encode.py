@@ -40,13 +40,13 @@ class CommandGenerateTest(unittest.TestCase):
         (
             {
                 'video_object': None,
-                'error_message': '[VIDEO_WORKER] Command Gen Fail: No Video Object'
+                'error_message': '[ENCODE_WORKER] Command generation: No Video object'
             }
         ),
         (
             {
                 'encode_object': None,
-                'error_message': '[VIDEO_WORKER] Command Gen Fail: No Encode Object'
+                'error_message': '[ENCODE_WORKER] Command generation: No Encode object'
             }
         ),
         (

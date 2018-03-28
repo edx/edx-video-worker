@@ -37,7 +37,7 @@ def veda_tokengen():
     )
 
     if veda_token_response.status_code != 200:
-        logger.error('VEDA Token Generate')
+        logger.error('[ENCODE_WORKER] VEDA token generation')
         return
 
     veda_token = ast.literal_eval(veda_token_response.text)['access_token']
@@ -58,7 +58,7 @@ def veda_tokengen():
     )
 
     if veda_auth_response.status_code != 200:
-        logger.error('VEDA Token Authorization')
+        logger.error('[ENCODE_WORKER] VEDA token authorization')
         return
 
     return veda_auth_response.text.strip()
@@ -79,7 +79,7 @@ def val_tokengen():
     response = requests.post(settings['val_token_url'] + '/', data=payload, timeout=settings['global_timeout'])
 
     if response.status_code != 200:
-        logger.error('Token Gen Fail: VAL - Check VAL Config')
+        logger.error('[ENCODE_WORKER] VAL token generation')
         return
 
     return ast.literal_eval(response.text)['access_token']

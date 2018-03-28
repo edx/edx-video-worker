@@ -9,7 +9,7 @@ ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd ${ROOTDIR}
 
 # Get vars from yaml
-QUEUE=$(cat ${ROOTDIR}/static_config.yaml | grep celery_worker_queue)
+QUEUE=$(cat ${ROOTDIR}/instance_config.yaml | grep celery_worker_queue)
 QUEUE=${QUEUE#*: }
 CONCUR=$(cat ${ROOTDIR}/instance_config.yaml | grep celery_threads)
 CONCUR=${CONCUR#*: }

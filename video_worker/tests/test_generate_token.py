@@ -32,7 +32,7 @@ class GenerateApiTokenTest(unittest.TestCase):
         mock_post.return_value = Mock(status_code=400, text='', content={})
         response = veda_tokengen()
         self.assertFalse(response)
-        mock_logger.error.assert_called_with('VEDA Token Generate')
+        mock_logger.error.assert_called_with('[ENCODE_WORKER] VEDA token generation')
 
     @patch('video_worker.generate_apitoken.requests.post')
     @patch('video_worker.generate_apitoken.logger')
@@ -51,7 +51,7 @@ class GenerateApiTokenTest(unittest.TestCase):
         ]
         response = veda_tokengen()
         self.assertFalse(response)
-        mock_logger.error.assert_called_with('VEDA Token Authorization')
+        mock_logger.error.assert_called_with('[ENCODE_WORKER] VEDA token authorization')
 
     @patch('video_worker.generate_apitoken.requests.post')
     def test_veda_tokengen(self, mock_post):
@@ -76,7 +76,7 @@ class GenerateApiTokenTest(unittest.TestCase):
         mock_post.return_value = Mock(status_code=400, text='', content={})
         response = val_tokengen()
         self.assertFalse(response)
-        mock_logger.error.assert_called_with('Token Gen Fail: VAL - Check VAL Config')
+        mock_logger.error.assert_called_with('[ENCODE_WORKER] VAL token generation')
 
     @patch('video_worker.generate_apitoken.requests.post')
     def test_val_tokengen(self, mock_post):
