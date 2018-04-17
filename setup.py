@@ -25,7 +25,7 @@ setup(
     install_requires=[
         'boto==2.39.0',
         'requests==2.10.0',
-        'celery==3.1.18',
+        'celery==4.1.0',
         'pyyaml==3.11',
         'nose==1.3.3',
         'newrelic'
