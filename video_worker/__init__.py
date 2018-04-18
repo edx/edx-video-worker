@@ -4,7 +4,6 @@ Generate a serial transcode stream from a VEDA instance via Celery.
 
 import boto
 import logging
-import nose
 import os
 import subprocess
 import shutil
@@ -86,10 +85,7 @@ class VideoWorker(object):
         self.VideoObject = Video(
             veda_id=self.veda_id,
         )
-        logger.info('[ENCODE_WORKER] {id} | {encoding} : Ready for Encode'.format(
-            id=self.VideoObject.val_id,
-            encoding=self.encode_profile
-        ))
+
         if self.source_file is not None:
             self.VideoObject.mezz_filepath = os.path.join(
                 self.workdir,
@@ -104,6 +100,10 @@ class VideoWorker(object):
         if not os.path.exists(self.workdir):
             os.mkdir(self.workdir)
 
+        logger.info('[ENCODE_WORKER] {id} | {encoding} : Ready for Encode'.format(
+            id=self.VideoObject.val_id,
+            encoding=self.encode_profile
+        ))
         # Pipeline Steps :
         #   I. Intake
         #     Ib. Validate Mezz
