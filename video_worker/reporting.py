@@ -32,21 +32,6 @@ class Credentials(object):
                 return None
 
 
-class ErrorObject(object):
-    """
-    Unspecified errors with a message
-    """
-    @staticmethod
-    def print_error(message):
-        decorator = "***************E*R*R*O*R*******************"
-        outgoing = '\n%s \n\n%s \n\n%s\n' % (
-            NODE_COLORS_BLUE + decorator + NODE_COLORS_END,
-            message,
-            NODE_COLORS_BLUE + decorator + NODE_COLORS_END,
-        )
-        print outgoing
-
-
 class Output(object):
     """
     Various reporting methods

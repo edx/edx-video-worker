@@ -16,7 +16,6 @@ from boto.s3.key import Key
 
 import generate_apitoken
 from video_worker.utils import get_config
-from video_worker.reporting import ErrorObject
 from video_worker.utils import build_url
 
 
@@ -28,7 +27,7 @@ START_PERCENTAGE = 2.0 / 100
 # skip 10 percent of video duration from end to avoid end credits
 END_PERCENTAGE = 10.0 / 100
 
-LOGGER = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class VideoImages(object):
@@ -80,11 +79,12 @@ class VideoImages(object):
         """
         Generate video images using ffmpeg.
         """
-        if self.video_object is None:
-            ErrorObject().print_error(
-                message='Video Images generation failed: No Video Object'
+        if not self.video_object:
+            logger.error(
+                '[ENCODE_WORKER] : {id} Video Image generation failed: No Video Object'.format(
+                )
             )
-            return None
+            return
 
         generated_images = []
         for position in self.calculate_positions(self.video_object.mezz_duration):
@@ -108,8 +108,8 @@ class VideoImages(object):
                 universal_newlines=True
             )
             stdoutdata, stderrdata = process.communicate()
-            LOGGER.info('executing command >> %s', command)
-            LOGGER.info('command output >> out=%s -- err=%s', stdoutdata, stderrdata)
+            logger.info('executing command >> %s', command)
+            logger.info('command output >> out=%s -- err=%s', stdoutdata, stderrdata)
 
         return_images = []
         for image in generated_images:
@@ -133,10 +133,8 @@ class VideoImages(object):
         try:
             bucket = s3_connection.get_bucket(self.settings['aws_video_images_bucket'])
         except S3ResponseError:
-            ErrorObject().print_error(
-                message='Invalid Storage Bucket for Video Images'
-            )
-            return None
+            logger.error('[ENCODE_WORKER] : Invalid Storage Bucket for Video Images')
+            return
 
         image_keys = []
         for generated_image in generated_images:
@@ -184,4 +182,10 @@ class VideoImages(object):
                 )
 
                 if not response.ok:
-                    ErrorObject.print_error(message=response.content)
+                    logger.error('[ENCODE_WORKER] : {id} {message}'.format(
+                        id=self.video_object.val_id,
+                        message=response.content
+                    ))
+
+if __name__ == '__main__':
+    vi = VideoImages()
