@@ -6,22 +6,22 @@ from VEDA_WORK_DIR, retrieves and checks URL, and passes info to objects
 
 import boto
 import boto.s3
-from boto.exception import S3ResponseError
 from boto.s3.key import Key
 import hashlib
+import logging
 import os
 import sys
 import shutil
 
 from global_vars import MULTI_UPLOAD_BARRIER, ENCODE_WORK_DIR
-from reporting import ErrorObject
 from video_worker.utils import get_config
 
 
 settings = get_config()
+logger = logging.getLogger(__name__)
 
 
-class Deliverable():
+class Deliverable(object):
 
     def __init__(self, VideoObject, encode_profile, output_file, **kwargs):
         self.VideoObject = VideoObject
@@ -138,8 +138,10 @@ class Deliverable():
         b = conn.lookup(settings['veda_deliverable_bucket'])
 
         if b is None:
-            ErrorObject().print_error(
-                message='Deliverable Fail: s3 Bucket Connection Error'
+            logger.error(
+                '[ENCODE_WORKER] : {file} Deliverable Fail: s3 Bucket Connection Error'.format(
+                    file=self.output_file
+                )
             )
             return False
 

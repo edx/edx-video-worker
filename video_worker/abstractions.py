@@ -8,10 +8,10 @@ AbstractionLayer Object (acts as master abstraction)
 """
 
 import json
-import os
+import logging
 import requests
 
-from reporting import ErrorObject, Output
+from reporting import Output
 import generate_apitoken
 from video_worker.utils import get_config
 from global_vars import *
@@ -22,6 +22,8 @@ from validate import ValidateVideo
 requests.packages.urllib3.disable_warnings()
 
 settings = get_config()
+
+logger = logging.getLogger(__name__)
 
 
 class Video(object):
@@ -51,20 +53,17 @@ class Video(object):
         test case
         """
         if self.veda_id is not None and len(settings['veda_api_url']) == 0:
-            ErrorObject().print_error(
-                message='VEDA API Config Incorrect, run test to debug'
-            )
-            return None
+            logger.error('[ENCODE_WORKER] VEDA API Config Incorrect')
+            return
 
         if self.veda_id is None and self.mezz_filepath is None:
-            print self.mezz_filepath
             self.mezz_extension = '.mp4'
             self.mezz_title = TEST_VIDEO_FILE
             self.mezz_filepath = os.path.join(TEST_VIDEO_DIR, TEST_VIDEO_FILE)
             self.valid = True
-            return None
-        if self.veda_id is not None:
+            return
 
+        if self.veda_id:
             """
             Generated Token
             """
@@ -160,10 +159,13 @@ class Encode(object):
 
         veda_token = generate_apitoken.veda_tokengen()
         if veda_token is None:
-            ErrorObject().print_error(
-                    message="VEDA Token Generate"
+            logger.error(
+                '[ENCODE_WORKER] : {id} {encode} VEDA Token Generate'.format(
+                    id=self.VideoObject.veda_id,
+                    encode=self.profile_name
                 )
-            return None
+            )
+            return
 
         data = {'product_spec': self.profile_name}
 
@@ -183,10 +185,13 @@ class Encode(object):
         enc_dict = json.loads(x.text)
 
         if len(enc_dict['results']) == 0:
-            ErrorObject().print_error(
-                message="VEDA API Encode Mismatch: No Data"
+            logger.error(
+                '[ENCODE_WORKER] : {id} {encode} VEDA API Encode Mismatch: No Data'.format(
+                    id=self.VideoObject.veda_id,
+                    encode=self.profile_name
+                )
             )
-            return None
+            return
 
         for e in enc_dict['results']:
             if e['product_spec'] == self.profile_name and e['profile_active'] is True:
@@ -223,10 +228,3 @@ class Encode(object):
         with open(self.encode_library) as data_file:
             data = json.load(data_file)
             return data["ENCODE_PROFILES"]
-
-
-def main():
-    pass
-
-if __name__ == '__main__':
-    sys.exit(main())

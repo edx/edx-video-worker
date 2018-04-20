@@ -15,15 +15,17 @@ FUTURE:
     - artifacting?
 
 """
-
+import logging
 import os
 import subprocess
 import sys
 
-from reporting import ErrorObject, Output
+from reporting import Output
 from video_worker.utils import get_config
 
 settings = get_config()
+
+logger = logging.getLogger(__name__)
 
 
 class ValidateVideo:
@@ -41,14 +43,18 @@ class ValidateVideo:
             -file exists
         """
         if not os.path.exists(self.filepath):
-            ErrorObject().print_error(
-                message='File QA fail: File is not found\n' + self.filepath
+            logger.error(
+                '[ENCODE_WORKER] : {filepath} File QA fail: File is not found'.format(
+                    filepath=self.filepath
+                )
             )
             return False
 
         if os.stat(self.filepath).st_size == 0:
-            ErrorObject().print_error(
-                message='File QA fail: Filesize is 0'
+            logger.error(
+                '[ENCODE_WORKER] : {filepath} File QA fail: Filesize is 0'.format(
+                    filepath=self.filepath
+                )
             )
             return False
 
@@ -74,29 +80,24 @@ class ValidateVideo:
                 return False
 
             if "multiple edit list entries, a/v desync might occur, patch welcome" in line:
-                print 1
                 return False
 
             if "Duration: " in line:
                 """Get and Test Duration"""
                 if "Duration: 00:00:00.0" in line:
-                    print 2
                     return False
                 elif "Duration: N/A, " in line:
-                    print 3
                     return False
 
                 vid_duration = line.split('Duration: ')[1].split(',')[0].strip()
                 duration = Output.seconds_from_string(duration=vid_duration)
 
                 if duration < 1.05:
-                    print 'TOO SHORT'
                     return False
 
         try:
             duration
         except:
-            print 'NO DUR'
             return False
 
         """
@@ -105,7 +106,6 @@ class ValidateVideo:
         if self.VideoObject is not None and self.product_file is True:
             # within five seconds
             if not (self.VideoObject.mezz_duration - 5) <= duration <= (self.VideoObject.mezz_duration + 5):
-                print 6
                 return False
 
         return True
@@ -118,10 +118,12 @@ class ValidateVideo:
             -file exists
         """
         if not os.path.exists(self.filepath):
-            ErrorObject().print_error(
-                message='File Vars fail: File is not found\n' + self.filepath
+            logger.error(
+                '[ENCODE_WORKER] : {filepath} File QA fail: Filesize is 0'.format(
+                    filepath=self.filepath
+                )
             )
-            return None
+            return
         # Filesize
         return_dict.setdefault('filesize', os.stat(self.filepath).st_size)
 

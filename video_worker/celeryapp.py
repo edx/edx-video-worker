@@ -94,11 +94,6 @@ def queue_transcode(vid_name, encode_command):
     pass
 
 
-@app.task
-def test_command(message):
-    print message
-
-
 if __name__ == '__main__':
     app = cel_start()
     app.start()
