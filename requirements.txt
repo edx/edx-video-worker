@@ -6,4 +6,4 @@ celery==4.1.0
 newrelic
 # TODO! https://openedx.atlassian.net/browse/EDUCATOR-2279
 # this way is required when installing using `pip install requirements.txt` so that `encode_profiles.json` is accessible
--e git+https://github.com/yro/chunkey.git@f659c95552413d340ccab7bd27e8d63a874fd316#egg=chunkey
+-e git+https://github.com/yro/chunkey.git@b485b93b096f7a209cc3f4afd67a998137e1ddb3#egg=chunkey
