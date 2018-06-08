@@ -40,11 +40,11 @@ class CommandGenerate:
         Generate command for ffmpeg lib
         """
         if self.VideoObject is None:
-            logger.error('[ENCODE_WORKER] Command generation: No Video object')
+            logger.error('Command generation: No Video object')
             return
 
         if self.EncodeObject is None:
-            logger.error('[ENCODE_WORKER] Command generation: No Encode object')
+            logger.error('Command generation: No Encode object')
             return
 
         if self.workdir is None:

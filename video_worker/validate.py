@@ -44,7 +44,7 @@ class ValidateVideo:
         """
         if not os.path.exists(self.filepath):
             logger.error(
-                '[ENCODE_WORKER] : {filepath} File QA fail: File is not found'.format(
+                ': {filepath} File QA fail: File is not found'.format(
                     filepath=self.filepath
                 )
             )
@@ -52,7 +52,7 @@ class ValidateVideo:
 
         if os.stat(self.filepath).st_size == 0:
             logger.error(
-                '[ENCODE_WORKER] : {filepath} File QA fail: Filesize is 0'.format(
+                ': {filepath} File QA fail: Filesize is 0'.format(
                     filepath=self.filepath
                 )
             )
@@ -119,7 +119,7 @@ class ValidateVideo:
         """
         if not os.path.exists(self.filepath):
             logger.error(
-                '[ENCODE_WORKER] : {filepath} File QA fail: Filesize is 0'.format(
+                ': {filepath} File QA fail: Filesize is 0'.format(
                     filepath=self.filepath
                 )
             )

@@ -51,7 +51,7 @@ class UpdateAPIStatus:
 
         self.veda_token = generate_apitoken.veda_tokengen()
         if self.veda_token is None:
-            logger.error('[ENCODE_WORKER] VEDA API connection: Invalid Setup/Method')
+            logger.error('VEDA API connection: Invalid Setup/Method')
             return None
 
         self.veda_headers = {
@@ -99,7 +99,7 @@ class UpdateAPIStatus:
         )
 
         if y.status_code != 200:
-            logger.error('[ENCODE_WORKER] VEDA API: API config')
+            logger.error('VEDA API: API config')
             return None
 
         return json.loads(y.text)
@@ -129,7 +129,7 @@ class UpdateAPIStatus:
             )
             if w.status_code != 200:
 
-                logger.error('[ENCODE_WORKER] VEDA API: GET Failure, no objects')
+                logger.error('VEDA API: GET Failure, no objects')
 
     def send_val_data(self):
         """
@@ -177,7 +177,7 @@ class UpdateAPIStatus:
 
         if r1.status_code != 200 and r1.status_code != 404:
             # Total API Failure
-            logger.error('[ENCODE_WORKER] VAL Communication')
+            logger.error('VAL Communication')
             return None
 
         if r1.status_code == 404:
@@ -195,7 +195,7 @@ class UpdateAPIStatus:
             )
 
             if r2.status_code > 299:
-                logger.error('[ENCODE_WORKER] VAL POST/PUT')
+                logger.error('VAL POST/PUT')
                 return None
 
         elif r1.status_code == 200:
@@ -231,5 +231,5 @@ class UpdateAPIStatus:
             )
 
             if r2.status_code > 299:
-                logger.error('[ENCODE_WORKER] VAL POST/PUT')
+                logger.error('VAL POST/PUT')
                 return None

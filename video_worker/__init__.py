@@ -35,8 +35,9 @@ try:
 except:
     pass
 
+server_name = os.environ['SERVER_NAME']
 boto.config.set('Boto', 'http_socket_timeout', BOTO_TIMEOUT)
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(format="[ENCODE_WORKER] %s " % server_name, level=logging.INFO)
 logging.getLogger("requests").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
@@ -79,7 +80,7 @@ class VideoWorker(object):
         self.settings = get_config()
 
         if self.encode_profile is None:
-            logger.error('[ENCODE_WORKER] No Encode Profile Specified')
+            logger.error('No Encode Profile Specified')
             return
 
         self.VideoObject = Video(
@@ -94,13 +95,13 @@ class VideoWorker(object):
 
         self.VideoObject.activate()
         if not self.VideoObject.valid:
-            logger.error('[ENCODE_WORKER] {id} : Invalid Video Data'.format(id=self.VideoObject.val_id))
+            logger.error('{id} : Invalid Video Data'.format(id=self.VideoObject.val_id))
             return
 
         if not os.path.exists(self.workdir):
             os.mkdir(self.workdir)
 
-        logger.info('[ENCODE_WORKER] {id} | {encoding} : Ready for Encode'.format(
+        logger.info('{id} | {encoding} : Ready for Encode'.format(
             id=self.VideoObject.val_id,
             encoding=self.encode_profile
         ))
@@ -118,7 +119,7 @@ class VideoWorker(object):
         self._engine_intake()
 
         if not self.VideoObject.valid:
-            logger.error('[ENCODE_WORKER] Invalid Video / Local')
+            logger.error('Invalid Video / Local')
             return
 
         if self.VideoObject.val_id is not None:
@@ -140,7 +141,7 @@ class VideoWorker(object):
 
         else:
             self._static_pipeline()
-        logger.info('[ENCODE_WORKER] {id} | {encoding} : Encode Complete'.format(
+        logger.info('{id} | {encoding} : Encode Complete'.format(
             id=self.VideoObject.val_id,
             encoding=self.encode_profile
         ))
@@ -152,7 +153,7 @@ class VideoWorker(object):
                 (veda_id, encode_profile),
                 queue=self.settings['celery_deliver_queue']
             )
-        logger.info('[ENCODE_WORKER] {id} | {encoding} : encoded file queued for delivery'.format(
+        logger.info('{id} | {encoding} : encoded file queued for delivery'.format(
             id=self.VideoObject.val_id,
             encoding=self.encode_profile
         ))
@@ -182,7 +183,7 @@ class VideoWorker(object):
         Activate HLS, use hls lib to upload
         """
         if not os.path.exists(os.path.join(self.workdir, self.source_file)):
-            logger.error('[ENCODE_WORKER] : {id} | {encoding} Local raw video file not found'.format(
+            logger.error(': {id} | {encoding} Local raw video file not found'.format(
                 id=self.VideoObject.val_id,
                 encoding=self.encode_profile
             ))
@@ -213,7 +214,7 @@ class VideoWorker(object):
         Copy file down from AWS S3 storage bucket
         """
         if not self.VideoObject.valid:
-            logger.error('[ENCODE_WORKER] : {id} Invalid Video'.format(
+            logger.error(': {id} Invalid Video'.format(
                 id=self.VideoObject.val_id,
             ))
             return
@@ -229,7 +230,7 @@ class VideoWorker(object):
             try:
                 bucket = conn.get_bucket(self.settings['veda_s3_hotstore_bucket'])
             except S3ResponseError:
-                logger.error('[ENCODE_WORKER] Invalid hotstore S3 bucket')
+                logger.error('Invalid hotstore S3 bucket')
                 return
 
             if self.VideoObject.mezz_extension is not None and len(self.VideoObject.mezz_extension) > 0:
@@ -242,7 +243,7 @@ class VideoWorker(object):
             source_key = bucket.get_key(self.source_file)
 
             if source_key is None:
-                logger.error('[ENCODE_WORKER] : {id} S3 Intake object not found'.format(
+                logger.error(': {id} S3 Intake object not found'.format(
                     id=self.VideoObject.val_id
                 ))
                 return
@@ -252,7 +253,7 @@ class VideoWorker(object):
             )
 
             if not os.path.exists(os.path.join(self.workdir, self.source_file)):
-                logger.error('[ENCODE_WORKER] : {id} engine intake download error'.format(
+                logger.error(': {id} engine intake download error'.format(
                     id=self.VideoObject.val_id
                 ))
             return
@@ -295,7 +296,7 @@ class VideoWorker(object):
         --no need to move the source--
         """
         if not os.path.exists(os.path.join(self.workdir, self.source_file)):
-            logger.error('[ENCODE_WORKER] : {id} Encode input file not found'.format(
+            logger.error(': {id} Encode input file not found'.format(
                 id=self.VideoObject.val_id
             ))
             return
@@ -311,7 +312,7 @@ class VideoWorker(object):
 
         self.output_file = self.ffcommand.split('/')[-1]
         if not os.path.exists(os.path.join(self.workdir, self.output_file)):
-            logger.error('[ENCODE_WORKER] : {id} Encode output file not found'.format(
+            logger.error(': {id} Encode output file not found'.format(
                 id=self.VideoObject.val_id
             ))
 

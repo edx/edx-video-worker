@@ -103,7 +103,7 @@ class ApiCommunicateTest(unittest.TestCase):
         if not veda_token:
             self.assertFalse(response)
             self.assertFalse(mock_send_veda_status.called)
-            mock_logger.error.assert_called_with('[ENCODE_WORKER] VEDA API connection: Invalid Setup/Method')
+            mock_logger.error.assert_called_with('VEDA API connection: Invalid Setup/Method')
         elif not veda_video_status:
             self.assertFalse(response)
             self.assertFalse(mock_send_veda_status.called)
@@ -159,7 +159,7 @@ class ApiCommunicateTest(unittest.TestCase):
             self.assertFalse(response)
         elif response_status_code != 200:
             self.assertTrue(mock_patch.called)
-            mock_logger.error.assert_called_with('[ENCODE_WORKER] VEDA API: GET Failure, no objects')
+            mock_logger.error.assert_called_with('VEDA API: GET Failure, no objects')
 
     @data(
         # Check empty values
@@ -192,7 +192,7 @@ class ApiCommunicateTest(unittest.TestCase):
                 'course_url': ['dummy-course-id'],
                 'get_status_code': 400,
                 'post_status_code': 200,
-                'error_message': '[ENCODE_WORKER] VAL Communication'
+                'error_message': 'VAL Communication'
             },
         ),
         (
@@ -202,7 +202,7 @@ class ApiCommunicateTest(unittest.TestCase):
                 'course_url': ['dummy-course-id'],
                 'get_status_code': 404,
                 'post_status_code': 300,
-                'error_message': '[ENCODE_WORKER] VAL POST/PUT'
+                'error_message': 'VAL POST/PUT'
             },
         ),
         (
@@ -212,7 +212,7 @@ class ApiCommunicateTest(unittest.TestCase):
                 'course_url': ['dummy-course-id'],
                 'get_status_code': 200,
                 'post_status_code': 300,
-                'error_message': '[ENCODE_WORKER] VAL POST/PUT'
+                'error_message': 'VAL POST/PUT'
             },
         ),
         # Success
@@ -278,7 +278,7 @@ class ApiCommunicateTest(unittest.TestCase):
 
     @data(
         (False, 400, ''),
-        (True, 400, '[ENCODE_WORKER] VEDA API: API config'),
+        (True, 400, 'VEDA API: API config'),
         (True, 200, '')
     )
     @unpack

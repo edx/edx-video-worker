@@ -81,7 +81,7 @@ class VideoImages(object):
         """
         if not self.video_object:
             logger.error(
-                '[ENCODE_WORKER] : {id} Video Image generation failed: No Video Object'.format(
+                ': {id} Video Image generation failed: No Video Object'.format(
                 )
             )
             return
@@ -133,7 +133,7 @@ class VideoImages(object):
         try:
             bucket = s3_connection.get_bucket(self.settings['aws_video_images_bucket'])
         except S3ResponseError:
-            logger.error('[ENCODE_WORKER] : Invalid Storage Bucket for Video Images')
+            logger.error(': Invalid Storage Bucket for Video Images')
             return
 
         image_keys = []
@@ -182,7 +182,7 @@ class VideoImages(object):
                 )
 
                 if not response.ok:
-                    logger.error('[ENCODE_WORKER] : {id} {message}'.format(
+                    logger.error(': {id} {message}'.format(
                         id=self.video_object.val_id,
                         message=response.content
                     ))

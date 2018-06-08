@@ -53,7 +53,7 @@ class Video(object):
         test case
         """
         if self.veda_id is not None and len(settings['veda_api_url']) == 0:
-            logger.error('[ENCODE_WORKER] VEDA API Config Incorrect')
+            logger.error('VEDA API Config Incorrect')
             return
 
         if self.veda_id is None and self.mezz_filepath is None:
@@ -160,7 +160,7 @@ class Encode(object):
         veda_token = generate_apitoken.veda_tokengen()
         if veda_token is None:
             logger.error(
-                '[ENCODE_WORKER] : {id} {encode} VEDA Token Generate'.format(
+                ': {id} {encode} VEDA Token Generate'.format(
                     id=self.VideoObject.veda_id,
                     encode=self.profile_name
                 )
@@ -186,7 +186,7 @@ class Encode(object):
 
         if len(enc_dict['results']) == 0:
             logger.error(
-                '[ENCODE_WORKER] : {id} {encode} VEDA API Encode Mismatch: No Data'.format(
+                ': {id} {encode} VEDA API Encode Mismatch: No Data'.format(
                     id=self.VideoObject.veda_id,
                     encode=self.profile_name
                 )
