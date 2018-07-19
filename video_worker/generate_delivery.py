@@ -139,7 +139,7 @@ class Deliverable(object):
 
         if b is None:
             logger.error(
-                '[ENCODE_WORKER] : {file} Deliverable Fail: s3 Bucket Connection Error'.format(
+                ': {file} Deliverable Fail: s3 Bucket Connection Error'.format(
                     file=self.output_file
                 )
             )
