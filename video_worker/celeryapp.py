@@ -18,9 +18,7 @@ settings = get_config()
 def cel_start():
     app = Celery(
         settings.setdefault('celery_app_name', ''),
-        broker='amqp://' + settings.setdefault('rabbitmq_user', '') +
-               ':' + settings.setdefault('rabbitmq_pass', '') +
-               '@' + settings.setdefault('rabbitmq_broker', '') + ':5672//',
+        broker='redis://:' + '@' + settings.setdefault('redis_broker', '') + ':6379/0',
         include=['celeryapp']
     )
 

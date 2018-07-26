@@ -4,6 +4,7 @@ nose==1.3.3
 requests==2.10.0
 celery==4.1.1
 newrelic
+redis==2.10.6
 # TODO! https://openedx.atlassian.net/browse/EDUCATOR-2279
 # this way is required when installing using `pip install requirements.txt` so that `encode_profiles.json` is accessible
 -e git+https://github.com/yro/chunkey.git@b485b93b096f7a209cc3f4afd67a998137e1ddb3#egg=chunkey
