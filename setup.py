@@ -28,7 +28,8 @@ setup(
         'celery==4.1.0',
         'pyyaml==3.11',
         'nose==1.3.3',
-        'newrelic'
+        'newrelic',
+        'redis==2.10.6'
     ],
     zip_safe=False
 )
