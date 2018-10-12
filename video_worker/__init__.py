@@ -35,9 +35,10 @@ try:
 except:
     pass
 
-server_name = os.environ['SERVER_NAME']
 boto.config.set('Boto', 'http_socket_timeout', BOTO_TIMEOUT)
-logging.basicConfig(format="[ENCODE_WORKER] %s " % server_name, level=logging.INFO)
+server_name = os.environ['SERVER_NAME']
+log_format = '[ENCODE_WORKER] ' + server_name + ': %(name)s - %(levelname)s - %(message)s'
+logging.basicConfig(format=log_format, level=logging.INFO)
 logging.getLogger("requests").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
@@ -95,14 +96,14 @@ class VideoWorker(object):
 
         self.VideoObject.activate()
         if not self.VideoObject.valid:
-            logger.error('{id} : Invalid Video Data'.format(id=self.VideoObject.val_id))
+            logger.error('{id} : Invalid Video Data'.format(id=self.VideoObject.veda_id))
             return
 
         if not os.path.exists(self.workdir):
             os.mkdir(self.workdir)
 
         logger.info('{id} | {encoding} : Ready for Encode'.format(
-            id=self.VideoObject.val_id,
+            id=self.VideoObject.veda_id,
             encoding=self.encode_profile
         ))
         # Pipeline Steps :
@@ -142,7 +143,7 @@ class VideoWorker(object):
         else:
             self._static_pipeline()
         logger.info('{id} | {encoding} : Encode Complete'.format(
-            id=self.VideoObject.val_id,
+            id=self.VideoObject.veda_id,
             encoding=self.encode_profile
         ))
         if self.endpoint_url is not None and self.VideoObject.veda_id is not None:
@@ -154,7 +155,7 @@ class VideoWorker(object):
                 queue=self.settings['celery_deliver_queue']
             )
         logger.info('{id} | {encoding} : encoded file queued for delivery'.format(
-            id=self.VideoObject.val_id,
+            id=self.VideoObject.veda_id,
             encoding=self.encode_profile
         ))
         # Clean up workdir
@@ -184,7 +185,7 @@ class VideoWorker(object):
         """
         if not os.path.exists(os.path.join(self.workdir, self.source_file)):
             logger.error(': {id} | {encoding} Local raw video file not found'.format(
-                id=self.VideoObject.val_id,
+                id=self.VideoObject.veda_id,
                 encoding=self.encode_profile
             ))
             return
@@ -215,7 +216,7 @@ class VideoWorker(object):
         """
         if not self.VideoObject.valid:
             logger.error(': {id} Invalid Video'.format(
-                id=self.VideoObject.val_id,
+                id=self.VideoObject.veda_id,
             ))
             return
 
@@ -297,7 +298,7 @@ class VideoWorker(object):
         """
         if not os.path.exists(os.path.join(self.workdir, self.source_file)):
             logger.error(': {id} Encode input file not found'.format(
-                id=self.VideoObject.val_id
+                id=self.VideoObject.veda_id
             ))
             return
 
@@ -313,7 +314,7 @@ class VideoWorker(object):
         self.output_file = self.ffcommand.split('/')[-1]
         if not os.path.exists(os.path.join(self.workdir, self.output_file)):
             logger.error(': {id} Encode output file not found'.format(
-                id=self.VideoObject.val_id
+                id=self.VideoObject.veda_id
             ))
 
     def _validate_encode(self):
