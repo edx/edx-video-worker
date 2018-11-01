@@ -5,10 +5,6 @@ source =
     video_worker
     tests
 
-omit =
-    video_worker/tests/*
-    tests/*
-
 concurrency=multiprocessing
 
 [report]
