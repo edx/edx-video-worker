@@ -38,30 +38,37 @@ class VideoWorkerCli:
         parser.add_argument(
             '-v', '--vedaid', default=None, 
             help='VEDA ID for source'
-            )
+        )
 
         parser.add_argument(
             '-e', '--profile', 
             help='Encode Profile', 
-            )
+        )
 
         parser.add_argument(
             '-setup', '--setup', 
             help='Configure Instance Credentials (one time)', 
             action='store_true'
-            )
+        )
 
         parser.add_argument(
             '-j', '--job', 
             help='Job ID',
             default=None
-            )
+        )
 
         parser.add_argument(
             '-t', '--test', 
             help='Test Configuration of Instance', 
             action='store_true'
-            )
+        )
+
+        parser.add_argument(
+            '-uvs', '--update-val-status',
+            default=False,
+            help='Whether update status in edxval or not',
+            action='store_true',
+        )
 
         self.args = parser.parse_args()
 
@@ -73,6 +80,7 @@ class VideoWorkerCli:
         self.jobid = self.args.job
         self.test = self.args.test
         self.setup = self.args.setup
+        self.update_val_status = self.args.update_val_status
 
     def run(self):
         """
@@ -82,8 +90,9 @@ class VideoWorkerCli:
             veda_id=self.veda_id,
             encode_profile=self.encode_profile,
             setup=self.setup,
-            jobid=self.jobid
-            )
+            jobid=self.jobid,
+            update_val_status=self.update_val_status
+        )
         if self.test is True:
             VW.test()
         else:

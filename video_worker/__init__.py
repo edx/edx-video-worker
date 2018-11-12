@@ -50,6 +50,7 @@ class VideoWorker(object):
         self.veda_id = kwargs.get('veda_id', None)
         self.setup = kwargs.get('setup', False)
         self.jobid = kwargs.get('jobid', None)
+        self.update_val_status = kwargs.get('update_val_status')
         self.encode_profile = kwargs.get('encode_profile', None)
         self.VideoObject = kwargs.get('VideoObject', None)
 
@@ -267,6 +268,7 @@ class VideoWorker(object):
         UpdateAPIStatus(
             val_video_status=VAL_TRANSCODE_STATUS,
             veda_video_status=NODE_TRANSCODE_STATUS,
+            send_val=self.update_val_status,
             VideoObject=self.VideoObject,
         ).run()
 
