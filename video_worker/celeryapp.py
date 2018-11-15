@@ -44,7 +44,7 @@ app = cel_start()
 
 
 @app.task(name='worker_encode')
-def worker_task_fire(veda_id, encode_profile, jobid):
+def worker_task_fire(veda_id, encode_profile, jobid, update_val_status=True):
     task_command = os.path.join(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
         'bin',
@@ -53,6 +53,14 @@ def worker_task_fire(veda_id, encode_profile, jobid):
     task_command += ' '
     task_command += '-v ' + veda_id
     task_command += ' '
+
+    # This controls whether worker updates the status in VAL or not. This is temporary and will be
+    # removed on videos are re-encoded for HLS profiles. This is required so the workers don't update
+    # videos status in edxval otherwise we won't be able to track which 'READY' videos need HLS re-encode.
+    if update_val_status:
+        task_command += '-uvs '
+        task_command += ' '
+
     task_command += '-e ' + encode_profile
     task_command += ' '
     task_command += '-j ' + jobid
