@@ -24,6 +24,9 @@ def cel_start():
 
     app.conf.update(
         BROKER_CONNECTION_TIMEOUT=60,
+        BROKER_TRANSPORT_OPTIONS = {
+            'visibility_timeout': 43200
+        },
         CELERY_IGNORE_RESULT=True,
         CELERY_TASK_RESULT_EXPIRES=10,
         CELERYD_PREFETCH_MULTIPLIER=1,
