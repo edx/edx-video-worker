@@ -17,6 +17,7 @@ from video_worker.api_communicate import UpdateAPIStatus
 from celeryapp import deliverable_route
 from video_worker.generate_encode import CommandGenerate
 from video_worker.generate_delivery import Deliverable
+from time import sleep
 
 from video_worker.global_vars import (
     HOME_DIR,
@@ -76,7 +77,10 @@ class VideoWorker(object):
         if self.jobid is None:
             return ENCODE_WORK_DIR
         else:
-            return os.path.join(ENCODE_WORK_DIR, self.jobid)
+            wd = os.path.join(ENCODE_WORK_DIR, self.jobid)
+            if not os.path.exists(wd):
+                os.mkdir(wd)
+        return wd
 
     def run(self):
         self.settings = get_config()
@@ -96,6 +100,17 @@ class VideoWorker(object):
             )
 
         self.VideoObject.activate()
+
+        # retry 5 times if the VideoObject is not valid
+        # the encoding celery work queue is thrown before the transaction is finished, so database may not updated yet..
+        for i in range(5):
+            if not self.VideoObject.valid:
+                logger.error('{id} : Invalid Video Data..  retry after 1 secs'.format(id=self.VideoObject.veda_id))
+                sleep(1)
+                self.VideoObject.activate()
+            else
+                break
+
         if not self.VideoObject.valid:
             logger.error('{id} : Invalid Video Data'.format(id=self.VideoObject.veda_id))
             return
