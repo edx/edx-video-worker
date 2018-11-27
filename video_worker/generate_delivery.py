@@ -90,6 +90,13 @@ class Deliverable(object):
             )
         else:
             conn = boto.connect_s3()
+
+        delv_bucket = conn.get_bucket(settings['veda_deliverable_bucket'])
+
+        bucket_location = delv_bucket.get_location()
+        if bucket_location:
+            conn = boto.s3.connect_to_region(bucket_location)
+
         delv_bucket = conn.get_bucket(settings['veda_deliverable_bucket'])
 
         upload_key = Key(delv_bucket)

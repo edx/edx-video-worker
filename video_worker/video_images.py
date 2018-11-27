@@ -7,6 +7,7 @@ import logging
 import math
 import os
 import subprocess
+import boto
 from uuid import uuid4
 
 import requests
@@ -135,6 +136,11 @@ class VideoImages(object):
         except S3ResponseError:
             logger.error(': Invalid Storage Bucket for Video Images')
             return
+
+        bucket_location = bucket.get_location()
+        if bucket_location:
+            s3_connection = boto.s3.connect_to_region(bucket_location)
+        bucket = s3_connection.get_bucket(self.settings['aws_video_images_bucket'])
 
         image_keys = []
         for generated_image in generated_images:
