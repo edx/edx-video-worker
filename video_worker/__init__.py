@@ -105,7 +105,7 @@ class VideoWorker(object):
         # the encoding celery work queue is thrown before the transaction is finished, so database may not updated yet..
         for i in range(5):
             if not self.VideoObject.valid:
-                logger.error('{id} : Invalid Video Data..  retry after 1 secs'.format(id=self.VideoObject.veda_id))
+                logger.info('{id} : Invalid Video Data..  retry after 1 secs'.format(id=self.VideoObject.veda_id))
                 sleep(1)
                 self.VideoObject.activate()
             else:
