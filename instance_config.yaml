@@ -99,7 +99,7 @@ celery_deliver_queue: deliver_worker
 celery_heal_queue: heal_queue
 celery_threads: 1
 
-redis_broker:
+redis_broker: ""
 
 onsite_worker: False
 
