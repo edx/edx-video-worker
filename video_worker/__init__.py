@@ -108,7 +108,7 @@ class VideoWorker(object):
                 logger.error('{id} : Invalid Video Data..  retry after 1 secs'.format(id=self.VideoObject.veda_id))
                 sleep(1)
                 self.VideoObject.activate()
-            else
+            else:
                 break
 
         if not self.VideoObject.valid:
