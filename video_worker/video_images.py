@@ -140,7 +140,9 @@ class VideoImages(object):
         bucket_location = bucket.get_location()
         if bucket_location:
             s3_connection = boto.s3.connect_to_region(bucket_location)
-        bucket = s3_connection.get_bucket(self.settings['aws_video_images_bucket'])
+
+        if s3_connection:
+            bucket = s3_connection.get_bucket(self.settings['aws_video_images_bucket'])
 
         image_keys = []
         for generated_image in generated_images:
