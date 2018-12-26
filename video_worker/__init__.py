@@ -170,6 +170,8 @@ class VideoWorker(object):
         if self.ffcommand is None:
             return
 
+        logger.info('ffcommand is written as %s', self.ffcommand)
+
         self._execute_encode()
 
         if self.encode_profile == 'audio_mp3':
