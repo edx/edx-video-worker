@@ -8,7 +8,7 @@ import logging
 import os
 import requests
 
-from video_worker.utils import get_config
+from video_worker.utils import get_config, retry, DEFAULT_TIMEOUT_SECONDS
 
 """Disable insecure warning for requests lib"""
 requests.packages.urllib3.disable_warnings()
@@ -20,6 +20,12 @@ settings = get_config()
 logger = logging.getLogger(__name__)
 
 
+class VEDATokenError(Exception):
+    """Raised when failed to get access token from VEDA."""
+    pass
+
+
+@retry(timeout=DEFAULT_TIMEOUT_SECONDS)
 def veda_tokengen():
     """
     Gen and authorize a VEDA API token
@@ -37,8 +43,7 @@ def veda_tokengen():
     )
 
     if veda_token_response.status_code != 200:
-        logger.error('VEDA token generation')
-        return
+        raise VEDATokenError('Failed to get access token from VEDA')
 
     veda_token = ast.literal_eval(veda_token_response.text)['access_token']
 
@@ -58,8 +63,7 @@ def veda_tokengen():
     )
 
     if veda_auth_response.status_code != 200:
-        logger.error('VEDA token authorization')
-        return
+        raise VEDATokenError('Failed to get access token from VEDA')
 
     return veda_auth_response.text.strip()
 
