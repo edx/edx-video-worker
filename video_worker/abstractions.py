@@ -10,6 +10,7 @@ AbstractionLayer Object (acts as master abstraction)
 import json
 import logging
 import requests
+import urllib3
 
 from reporting import Output
 import generate_apitoken
@@ -19,7 +20,7 @@ from validate import ValidateVideo
 
 
 """Disable insecure warning for requests lib"""
-requests.packages.urllib3.disable_warnings()
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 settings = get_config()
 
