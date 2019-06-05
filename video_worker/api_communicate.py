@@ -8,6 +8,7 @@ import logging
 import os
 import operator
 import requests
+import urllib3
 import sys
 
 import generate_apitoken
@@ -16,7 +17,7 @@ from video_worker.utils import get_config
 
 settings = get_config()
 # Disable warning
-requests.packages.urllib3.disable_warnings()
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 logger = logging.getLogger(__name__)

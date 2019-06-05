@@ -7,11 +7,13 @@ import ast
 import logging
 import os
 import requests
+import urllib3
 
 from video_worker.utils import get_config
 
 """Disable insecure warning for requests lib"""
-requests.packages.urllib3.disable_warnings()
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 settings = get_config()
