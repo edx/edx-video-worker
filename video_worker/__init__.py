@@ -2,6 +2,7 @@
 Generate a serial transcode stream from a VEDA instance via Celery.
 """
 
+from __future__ import absolute_import
 import boto
 import logging
 import os
@@ -14,7 +15,7 @@ from chunkey import Chunkey
 
 from video_worker.abstractions import Video, Encode
 from video_worker.api_communicate import UpdateAPIStatus
-from celeryapp import deliverable_route
+from .celeryapp import deliverable_route
 from video_worker.generate_encode import CommandGenerate
 from video_worker.generate_delivery import Deliverable
 

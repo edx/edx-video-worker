@@ -4,6 +4,7 @@ from VEDA_WORK_DIR, retrieves and checks URL, and passes info to objects
 
 """
 
+from __future__ import absolute_import
 import boto
 import boto.s3
 from boto.s3.key import Key
@@ -13,7 +14,7 @@ import os
 import sys
 import shutil
 
-from global_vars import MULTI_UPLOAD_BARRIER, ENCODE_WORK_DIR
+from .global_vars import MULTI_UPLOAD_BARRIER, ENCODE_WORK_DIR
 from video_worker.utils import get_config
 
 

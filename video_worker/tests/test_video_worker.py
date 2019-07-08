@@ -2,6 +2,7 @@
 This file tests the working of Video Worker.
 """
 
+from __future__ import absolute_import
 import os
 import unittest
 
@@ -76,7 +77,7 @@ class VideoWorkerTest(unittest.TestCase):
             {
                 'is_valid': False,
                 'encode_profile': 'static-pipeline',
-                'error_message': 'dummy-val-id : Invalid Video Data'
+                'error_message': 'dummy-veda-id : Invalid Video Data'
             }
         ),
         (
@@ -204,7 +205,7 @@ class VideoWorkerTest(unittest.TestCase):
         self.VW._hls_pipeline()
 
         self.assertIsNone(self.VW.endpoint_url)
-        mock_logger.assert_called_with(': None | None Local raw video file not found')
+        mock_logger.assert_called_with(': XXXXXXXX2016-V00TEST | None Local raw video file not found')
 
     @data(
         (
@@ -287,7 +288,7 @@ class VideoWorkerTest(unittest.TestCase):
         (
             {
                 'valid_video': False,
-                'error_message': ': None Invalid Video'
+                'error_message': ': XXXXXXXX2016-V00TEST Invalid Video'
             }
         ),
         (
@@ -414,13 +415,13 @@ class VideoWorkerTest(unittest.TestCase):
     @data(
         (
             {
-                'error_message': ': None Encode input file not found'
+                'error_message': ': XXXXXXXX2016-V00TEST Encode input file not found'
             }
         ),
         (
             {
                 'path_exists': [True, False],
-                'error_message': ': None Encode output file not found'
+                'error_message': ': XXXXXXXX2016-V00TEST Encode output file not found'
             }
         ),
         (

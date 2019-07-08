@@ -2,6 +2,7 @@
 This module is responsible for communication with edx-video-pipeline like sending veda and val status.
 """
 
+from __future__ import absolute_import
 import ast
 import json
 import logging
@@ -11,8 +12,9 @@ import requests
 import urllib3
 import sys
 
-import generate_apitoken
+from . import generate_apitoken
 from video_worker.utils import get_config
+from functools import reduce
 
 
 settings = get_config()
@@ -203,7 +205,7 @@ class UpdateAPIStatus:
             # ID is previously extant
             val_api_return = ast.literal_eval(r1.text)
             # extract course ids, courses will be a list of dicts, [{'course_id': 'image_name'}]
-            course_ids = reduce(operator.concat, (d.keys() for d in val_api_return['courses']))
+            course_ids = reduce(operator.concat, (list(d.keys()) for d in val_api_return['courses']))
 
             # VAL will not allow duped studio urls to be sent, so
             # we must scrub the data

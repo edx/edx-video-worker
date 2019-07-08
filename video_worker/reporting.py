@@ -3,6 +3,7 @@ Quick and dirty error handling & logging
 
 """
 
+from __future__ import absolute_import
 import boto.ses
 import os
 import socket
@@ -10,7 +11,7 @@ import sys
 import yaml
 
 
-from global_vars import *
+from .global_vars import *
 
 
 class Credentials(object):

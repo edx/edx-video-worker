@@ -3,6 +3,7 @@ Generates authorized Video Pipeline and VAL token.
 
 """
 
+from __future__ import absolute_import
 import ast
 import logging
 import os

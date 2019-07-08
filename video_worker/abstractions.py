@@ -7,16 +7,17 @@ AbstractionLayer Object (acts as master abstraction)
 
 """
 
+from __future__ import absolute_import
 import json
 import logging
 import requests
 import urllib3
 
-from reporting import Output
-import generate_apitoken
+from .reporting import Output
+from . import generate_apitoken
 from video_worker.utils import get_config
-from global_vars import *
-from validate import ValidateVideo
+from .global_vars import *
+from .validate import ValidateVideo
 
 
 """Disable insecure warning for requests lib"""

@@ -12,12 +12,13 @@ input, via two classes, encode and video, which can be generated either via the 
 or via celery connection to VEDA (VEDA will send video_id and encode_profile via Celery queue)
 """
 
+from __future__ import absolute_import
 import logging
 import os
 import sys
 
 from video_worker.utils import get_config
-from global_vars import ENCODE_WORK_DIR, TARGET_ASPECT_RATIO, ENFORCE_TARGET_ASPECT
+from .global_vars import ENCODE_WORK_DIR, TARGET_ASPECT_RATIO, ENFORCE_TARGET_ASPECT
 
 logger = logging.getLogger(__name__)
 
