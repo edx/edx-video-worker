@@ -2,6 +2,7 @@
 Generate 3 images for a course video.
 """
 
+from __future__ import absolute_import
 import json
 import logging
 import math
@@ -14,9 +15,10 @@ from boto.exception import S3ResponseError
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 
-import generate_apitoken
+from . import generate_apitoken
 from video_worker.utils import get_config
 from video_worker.utils import build_url
+from six.moves import range
 
 
 IMAGE_COUNT = 3

@@ -4,6 +4,7 @@ Globals
 
 """
 
+from __future__ import absolute_import
 import os
 from os.path import expanduser
 from video_worker.utils import get_config, ROOT_DIR

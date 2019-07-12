@@ -2,6 +2,7 @@
 This file tests token generation for val and veda APIs.
 """
 
+from __future__ import absolute_import
 import json
 import unittest
 

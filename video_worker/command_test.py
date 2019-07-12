@@ -2,10 +2,11 @@
 generate and fire a test task
 
 """
+from __future__ import absolute_import
 import os
 import sys
 
-import celeryapp
+from . import celeryapp
 
 
 def fire_task():

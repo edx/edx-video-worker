@@ -1,6 +1,7 @@
 """
 Video image generation tests.
 """
+from __future__ import absolute_import
 import os
 import tempfile
 import unittest
@@ -12,7 +13,7 @@ from mock import Mock, patch
 from moto import mock_s3_deprecated
 from PIL import Image
 
-from utils import TEST_INSTANCE_YAML
+from .utils import TEST_INSTANCE_YAML
 from video_worker import video_images
 
 

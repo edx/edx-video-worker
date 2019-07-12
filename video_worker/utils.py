@@ -1,8 +1,9 @@
 """
 Common utils.
 """
+from __future__ import absolute_import
 import os
-import urllib
+import six.moves.urllib.request, six.moves.urllib.parse, six.moves.urllib.error
 import yaml
 
 
@@ -25,7 +26,7 @@ def build_url(*urls, **query_params):
     """
     url = '/'.join(item.strip('/') for item in urls if item)
     if query_params:
-        url = '{}?{}'.format(url, urllib.urlencode(query_params))
+        url = '{}?{}'.format(url, six.moves.urllib.parse.urlencode(query_params))
 
     return url
 

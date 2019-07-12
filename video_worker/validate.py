@@ -15,12 +15,13 @@ FUTURE:
     - artifacting?
 
 """
+from __future__ import absolute_import
 import logging
 import os
 import subprocess
 import sys
 
-from reporting import Output
+from .reporting import Output
 from video_worker.utils import get_config
 
 settings = get_config()
