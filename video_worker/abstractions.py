@@ -112,8 +112,10 @@ class Video(object):
                 self.mezz_filepath = '/'.join((
                     'https://s3.amazonaws.com',
                     settings['veda_s3_hotstore_bucket'],
-                    self.veda_id + '.' + self.mezz_extension
+                    self.veda_id
                 ))
+                if self.mezz_extension:
+                    self.mezz_filepath += '.' + self.mezz_extension
                 self.valid = True
         else:
             VV = ValidateVideo(
