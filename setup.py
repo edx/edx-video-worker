@@ -26,11 +26,14 @@ setup(
     install_requires=[
         'boto==2.39.0',
         'requests==2.10.0',
-        'celery==4.1.0',
+        'celery==4.1.1',
         'pyyaml==3.11',
         'nose==1.3.3',
         'newrelic',
-        'redis==2.10.6'
+        'redis==2.10.6',
+	'kombu==4.2.2post1',
+	'amqp==2.3.2',
+	'vine==1.3.0'
     ],
     zip_safe=False
 )
