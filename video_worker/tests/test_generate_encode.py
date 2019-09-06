@@ -274,7 +274,7 @@ class CommandGenerateTest(unittest.TestCase):
         {
             'file_type': 'mp4',
             'veda_id': 'dummy-veda-id',
-            'expected_ffcommand': ['-movflags', 'faststart']
+            'expected_ffcommand': ['-movflags', 'faststart', '-write_tmcd', 'off']
         },
         {
             'file_type': 'webm',
@@ -284,7 +284,7 @@ class CommandGenerateTest(unittest.TestCase):
         {
             'file_type': 'mp4',
             'veda_id': None,
-            'expected_ffcommand': ['-movflags', 'faststart']
+            'expected_ffcommand': ['-movflags', 'faststart', '-write_tmcd', 'off']
         },
     )
     @unpack
