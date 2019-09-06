@@ -253,6 +253,8 @@ class CommandGenerate:
         if self.EncodeObject.filetype == 'mp4':
             self.ffcommand.append('-movflags')
             self.ffcommand.append('faststart')
+            self.ffcommand.append('-write_tmcd')
+            self.ffcommand.append('off')
         elif self.EncodeObject.filetype == 'webm':
             # This is WEBM = 1 Pass
             self.ffcommand.append('-c:a')
