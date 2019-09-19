@@ -2,26 +2,23 @@ language: python
 
 dist: xenial
 
-python:
-  - "2.7"
-sudo: required
-
-env:
-  - SERVER_NAME=worker
 
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y ffmpeg
 
-install:
-  - pip install -r requirements.txt
-  - pip install -r test-requirements.txt
-  - pip install codecov
-
+matrix:
+  include:
+    - python: 2.7
+      env:
+       - TOX_ENV=py27
+    - python: 3.5
+      env:
+        - TOX_ENV=py35
 script: video_worker
 
 script:
-  - make validate
+  - tox -e $TOX_ENV
 
 after_success:
   - pip install -U codecov
