@@ -3,6 +3,7 @@ Tests common utils
 """
 from __future__ import absolute_import
 import os
+import six
 import tempfile
 from unittest import TestCase
 
@@ -105,10 +106,33 @@ class UtilTests(TestCase):
             *urls,
             **params
         )
-        self.assertEqual(
-            url,
-            expected_url
-        )
+
+        generated_url_object = six.moves.urllib.parse.urlparse(url)
+        generated_query_params = generated_url_object.query
+
+        generated_query_netloc = generated_url_object.netloc
+        generated_query_path = generated_url_object.path
+
+        generated_query_params = six.moves.urllib.parse.parse_qsl(generated_query_params)
+        generated_query_params = sorted(generated_query_params)
+
+        expected_url_object = six.moves.urllib.parse.urlparse(expected_url)
+        expected_query_params = expected_url_object.query
+
+        expected_query_netloc = expected_url_object.netloc
+        expected_query_path = expected_url_object.path
+
+        expected_query_params = six.moves.urllib.parse.parse_qsl(expected_query_params)
+        expected_query_params = sorted(expected_query_params)
+
+        self.assertEqual(generated_query_params,
+                         expected_query_params)
+
+        self.assertEqual(generated_query_netloc,
+                         expected_query_netloc)
+
+        self.assertEqual(generated_query_path,
+                         expected_query_path)
 
     def test_get_config_does_not_exist(self):
         """
