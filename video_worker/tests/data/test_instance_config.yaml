@@ -13,11 +13,11 @@ veda_secret_key: 'dummy-veda-secret-key'
 
 # VAL credentials
 val_api_url: 'http://dummy-val-api-url'
-val_token_url: 'http://dummy-veda-token-url'
-val_client_id: 'dummy-val-client-id'
-val_secret_key: 'dummy-val-secret-key'
-val_username: 'dummy-val-username'
-val_password: 'dummy-val-password'
+
+# Oauth credentials
+oauth2_provider_url: 'http://localhost'
+oauth2_client_id: 'vedatest'
+oauth2_client_secret: 'secret'
 
 # Buckets
 edx_s3_ingest_prefix: '/prefix'

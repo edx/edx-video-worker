@@ -6,11 +6,11 @@ from __future__ import absolute_import
 import ast
 import json
 import logging
-import os
 import operator
 import requests
 import urllib3
-import sys
+
+from edx_rest_api_client.client import OAuthAPIClient
 
 from . import generate_apitoken
 from video_worker.utils import get_config
@@ -38,8 +38,6 @@ class UpdateAPIStatus:
         self.veda_headers = None
         self.veda_video_dict = None
         # generated values (VAL)
-        self.val_token = None
-        self.val_headers = None
         self.encode_data = {}
 
     def run(self):
@@ -69,17 +67,6 @@ class UpdateAPIStatus:
             return self.send_veda_status()
 
     def run_val(self):
-        """
-        Errors covered in other methods
-        """
-        self.val_token = generate_apitoken.val_tokengen()
-        if self.val_token is None:
-            return None
-
-        self.val_headers = {
-            'Authorization': 'Bearer ' + self.val_token,
-            'content-type': 'application/json'
-        }
         self.send_val_data()
 
     def determine_veda_pk(self):
@@ -156,8 +143,6 @@ class UpdateAPIStatus:
         ## "PUT" for extant objects to video/id --
             cannot send duplicate course records
         '''
-        if self.val_token is None:
-            return None
 
         # in case non-studio side upload
         if self.VideoObject.val_id is None or len(self.VideoObject.val_id) == 0:
@@ -172,11 +157,10 @@ class UpdateAPIStatus:
         if not isinstance(self.VideoObject.course_url, list):
             self.VideoObject.course_url = [self.VideoObject.course_url]
 
-        r1 = requests.get(
-            '/'.join((settings['val_api_url'], self.VideoObject.val_id, '')),
-            headers=self.val_headers,
-            timeout=settings['global_timeout']
-        )
+        client = OAuthAPIClient(settings['oauth2_provider_url'],
+                                settings['oauth2_client_id'],
+                                settings['oauth2_client_secret'])
+        r1 = client.request('GET', '/'.join((settings['val_api_url'], self.VideoObject.val_id, '')))
 
         if r1.status_code != 200 and r1.status_code != 404:
             # Total API Failure
@@ -190,13 +174,7 @@ class UpdateAPIStatus:
             val_data['status'] = self.val_video_status
 
             # Final Connection
-            r2 = requests.post(
-                settings['val_api_url'],
-                data=json.dumps(val_data),
-                headers=self.val_headers,
-                timeout=settings['global_timeout']
-            )
-
+            r2 = client.request('POST', settings['val_api_url'], data=json.dumps(val_data))
             if r2.status_code > 299:
                 logger.error('VAL POST/PUT')
                 return None
@@ -226,12 +204,8 @@ class UpdateAPIStatus:
             val_data['status'] = self.val_video_status
 
             # Make Request, finally
-            r2 = requests.put(
-                '/'.join((settings['val_api_url'], self.VideoObject.val_id)),
-                data=json.dumps(val_data),
-                headers=self.val_headers,
-                timeout=settings['global_timeout']
-            )
+            r2 = client.request('PUT', '/'.join((settings['val_api_url'], self.VideoObject.val_id)),
+                                data=json.dumps(val_data))
 
             if r2.status_code > 299:
                 logger.error('VAL POST/PUT')

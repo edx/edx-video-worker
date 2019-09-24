@@ -111,21 +111,14 @@ class ApiCommunicateTest(unittest.TestCase):
         else:
             self.assertTrue(mock_send_veda_status.called)
 
-    @data(None, 'dummy-val-token')
     @patch('video_worker.api_communicate.UpdateAPIStatus.send_val_data')
-    @patch('video_worker.generate_apitoken.val_tokengen')
-    def test_run_val(self, val_token, mock_val_tokengen, mock_send_val_data):
+    def test_run_val(self, mock_send_val_data):
         """
         Test that `run_val` method works correctly.
         """
-        mock_val_tokengen.return_value = val_token
         communicate_api = self.setup_api()
-        response = communicate_api.run_val()
-        if not val_token:
-            self.assertFalse(response)
-            self.assertFalse(mock_send_val_data.called)
-        else:
-            self.assertTrue(mock_send_val_data.called)
+        communicate_api.run_val()
+        self.assertTrue(mock_send_val_data.called)
 
     @data(
         (True, 200),
@@ -226,11 +219,9 @@ class ApiCommunicateTest(unittest.TestCase):
         )
     )
     @unpack
-    @patch('video_worker.api_communicate.requests.put')
-    @patch('video_worker.api_communicate.requests.post')
-    @patch('video_worker.api_communicate.requests.get')
+    @patch('edx_rest_api_client.client.OAuthAPIClient.request')
     @patch('video_worker.api_communicate.logger')
-    def test_send_val_data(self, data, mock_logger, mock_get, mock_post, mock_put):
+    def test_send_val_data(self, data, mock_logger, mock_client):
         """
         Tests `send_val_data` method works correctly.
         """
@@ -249,9 +240,9 @@ class ApiCommunicateTest(unittest.TestCase):
             }]
         })
 
-        mock_get.return_value = Mock(status_code=get_status_code, text=response_data, content=response_data)
-        mock_post.return_value = Mock(status_code=post_status_code, text=response_data, content=response_data)
-        mock_put.return_value = Mock(status_code=post_status_code, text=response_data, content=response_data)
+        mock_client.get.return_value = Mock(status_code=get_status_code, text=response_data, content=response_data)
+        mock_client.post.return_value = Mock(status_code=post_status_code, text=response_data, content=response_data)
+        mock_client.put.return_value = Mock(status_code=post_status_code, text=response_data, content=response_data)
         communicate_api = self.setup_api(
             VideoObject=self.Video,
             val_video_status=self.val_video_status,
@@ -261,21 +252,9 @@ class ApiCommunicateTest(unittest.TestCase):
         )
 
         response = communicate_api.send_val_data()
-
-        if not data.get('val_token', None):
-            self.assertFalse(mock_get.called)
-            self.assertFalse(mock_post.called)
-            self.assertFalse(response)
-
-        if expected_error_message:
-            self.assertTrue(mock_get.called)
-            if get_status_code == 404:
-                self.assertFalse(mock_put.called)
-                self.assertTrue(mock_post.called)
-            if get_status_code == 200:
-                self.assertFalse(mock_post.called)
-                self.assertTrue(mock_put.called)
-            mock_logger.error.assert_called_with(expected_error_message)
+        expected_url_id = data.get('val_id', None) or self.Video.veda_id
+        mock_client.assert_called_with('GET', WORKER_SETTINGS['val_api_url'] + '/' + expected_url_id + '/')
+        # TODO: need more tests for the additional client calls that occur after the GET returns an error
 
     @data(
         (False, 400, ''),
