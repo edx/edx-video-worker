@@ -73,14 +73,14 @@ instance_prefix: ''
 # VAL user creds
 # ---
 val_api_url: 'http://dummy-val-api-url'
-val_token_url: 'http://dummy-veda-token-url'
-val_client_id: 'dummy-val-client-id'
 val_video_images_url: 'http://dummy-val-api-url'
 val_transcript_create_url: 'http://dummy-val-api-url'
 val_video_transcript_status_url: 'http://dummy-val-api-url'
-val_secret_key: 'dummy-val-secret-key'
-val_username: 'dummy-val-username'
-val_password: 'dummy-val-password'
+
+## Oauth2
+oauth2_provider_url: 'http://dummy-oauth2-url'
+oauth2_client_id: vedaclient
+oauth2_client_secret: vedasecret
 
 ## VEDA API Auth
 veda_api_url: 'http://dummy-veda-api-url'

@@ -6,7 +6,6 @@ Generates authorized Video Pipeline and VAL token.
 from __future__ import absolute_import
 import ast
 import logging
-import os
 import requests
 import urllib3
 
@@ -65,24 +64,3 @@ def veda_tokengen():
         return
 
     return veda_auth_response.text.strip()
-
-
-def val_tokengen():
-    """
-    Gen and authorize a VAL API token
-    """
-    payload = {
-        'grant_type': 'password',
-        'client_id': settings['val_client_id'],
-        'client_secret': settings['val_secret_key'],
-        'username': settings['val_username'],
-        'password': settings['val_password']
-    }
-
-    response = requests.post(settings['val_token_url'] + '/', data=payload, timeout=settings['global_timeout'])
-
-    if response.status_code != 200:
-        logger.error('VAL token generation')
-        return
-
-    return ast.literal_eval(response.text)['access_token']

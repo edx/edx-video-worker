@@ -7,6 +7,7 @@ celery==4.1.1
 newrelic
 redis==2.10.6
 tox==3.1.0
+edx-rest-api-client==1.9.2
 # TODO! https://openedx.atlassian.net/browse/EDUCATOR-2279
 # this way is required when installing using `pip install requirements.txt` so that `encode_profiles.json` is accessible
 -e git+https://github.com/edx/chunkey.git@146e4bd370be3f8d43d82103ae92ade66ef62018#egg=Chunkey

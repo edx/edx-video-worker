@@ -7,6 +7,7 @@ import tempfile
 import unittest
 
 import yaml
+import json
 from boto.s3.connection import S3Connection
 from ddt import data, ddt, unpack
 from mock import Mock, patch
@@ -116,8 +117,8 @@ class VideoImagesTest(unittest.TestCase):
         ),
     )
     @unpack
-    @patch('video_worker.video_images.generate_apitoken.val_tokengen', Mock(return_value='val_api_token'))
-    def test_update_val(self, course_ids, image_keys, post_called, post_call_count):
+    @patch('edx_rest_api_client.client.OAuthAPIClient.request')
+    def test_update_val(self, course_ids, image_keys, post_called, post_call_count, mock_request):
         """
         Verify that VideoImages.update_val method works as expected.
         """
@@ -131,8 +132,15 @@ class VideoImagesTest(unittest.TestCase):
                 settings=self.settings
             ).update_val(image_keys)
 
-            self.assertEqual(mock_post.called, post_called)
-            self.assertEqual(mock_post.call_count, post_call_count)
+            for course_id in course_ids:
+                expected_data = json.dumps({
+                        'course_id': course_id,
+                        'edx_video_id': None,
+                        'generated_images': image_keys
+                    })
+                if post_called:
+                    mock_request.assert_any_call('POST', self.settings['val_video_images_url'], data=expected_data)
+                self.assertEqual(mock_request.call_count, post_call_count)
 
     @mock_s3_deprecated
     def test_upload_image_keys(self):

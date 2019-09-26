@@ -14,6 +14,7 @@ import requests
 from boto.exception import S3ResponseError
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
+from edx_rest_api_client.client import OAuthAPIClient
 
 from . import generate_apitoken
 from video_worker.utils import get_config
@@ -171,23 +172,18 @@ class VideoImages(object):
                     'generated_images': image_keys
                 }
 
-                val_headers = {
-                    'Authorization': 'Bearer {val_token}'.format(val_token=generate_apitoken.val_tokengen()),
-                    'content-type': 'application/json'
-                }
+                client = OAuthAPIClient(self.settings['oauth2_provider_url'],
+                                        self.settings['oauth2_client_id'],
+                                        self.settings['oauth2_client_secret'])
 
-                response = requests.post(
-                    self.settings['val_video_images_url'],
-                    data=json.dumps(data),
-                    headers=val_headers,
-                    timeout=self.settings['global_timeout']
-                )
+                response = client.request('POST', self.settings['val_video_images_url'], data=json.dumps(data))
 
                 if not response.ok:
                     logger.error(': {id} {message}'.format(
                         id=self.video_object.val_id,
                         message=response.content
                     ))
+
 
 if __name__ == '__main__':
     vi = VideoImages()
