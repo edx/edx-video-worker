@@ -139,7 +139,7 @@ class VideoImagesTest(unittest.TestCase):
                         'generated_images': image_keys
                     })
                 if post_called:
-                    mock_request.assert_any_call('POST', self.settings['val_video_images_url'], data=expected_data)
+                    mock_request.assert_any_call('POST', self.settings['val_video_images_url'], json=expected_data)
                 self.assertEqual(mock_request.call_count, post_call_count)
 
     @mock_s3_deprecated

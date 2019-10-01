@@ -24,3 +24,5 @@ test_videofiles/
 
 ### VisualStudioCode ###
 .vscode/*
+
+.python-version
