@@ -51,16 +51,16 @@ def get_config(yaml_config_file=DEFAULT_CONFIG_FILE_NAME):
             yaml_config_file
         )
     with open(yaml_config_file, 'r') as config:
-        config_dict = yaml.load(config)
+        config_dict = yaml.load(config, Loader=yaml.FullLoader)
 
     # read static config file
     with open(STATIC_CONFIG_FILE_PATH, 'r') as config:
-        static_config_dict = yaml.load(config)
+        static_config_dict = yaml.load(config, Loader=yaml.FullLoader)
 
     # Protect against missing vars
     default_yaml = os.path.join(ROOT_DIR, DEFAULT_CONFIG_FILE_NAME)
     with open(default_yaml, 'r') as config:
-        default_dict = yaml.load(config)
+        default_dict = yaml.load(config, Loader=yaml.FullLoader)
     for key, entry in default_dict.items():
         config_dict.setdefault(key, entry)
 
