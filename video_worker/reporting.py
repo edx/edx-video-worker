@@ -28,7 +28,7 @@ class Credentials(object):
             return None
         with open(self.auth_yaml, 'r') as stream:
             try:
-                return yaml.load(stream)
+                return yaml.load(stream, Loader=yaml.FullLoader)
             except yaml.YAMLError as exc:
                 return None
 

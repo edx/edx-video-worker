@@ -39,7 +39,7 @@ class VideoImagesTest(unittest.TestCase):
         )
         self.source_file = 'test.mp4'
         with open(TEST_INSTANCE_YAML, 'r') as stream:
-            self.settings = yaml.load(stream)
+            self.settings = yaml.load(stream, Loader=yaml.FullLoader)
 
     @patch.object(video_images.VideoImages, 'generate', return_value = ['a/1.png'])
     @patch.object(video_images.VideoImages, 'upload', return_value = ['s3://images/a/1.png'])

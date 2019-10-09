@@ -158,11 +158,11 @@ class UtilTests(TestCase):
             utils.DEFAULT_CONFIG_FILE_NAME
         )
         with open(default_yaml_config_file, 'r') as config:
-            config_dict = yaml.load(config)
+            config_dict = yaml.load(config, Loader=yaml.FullLoader)
 
         # read the default static config file
         with open(utils.STATIC_CONFIG_FILE_PATH, 'r') as config:
-            static_config_dict = yaml.load(config)
+            static_config_dict = yaml.load(config, Loader=yaml.FullLoader)
 
         self.assertDictEqual(
             instance_config,

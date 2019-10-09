@@ -12,9 +12,9 @@ matrix:
     - python: 2.7
       env:
        - TOX_ENV=py27
-    - python: 3.5
+    - python: 3.7
       env:
-        - TOX_ENV=py35
+        - TOX_ENV=py37
 script: video_worker
 
 script:
