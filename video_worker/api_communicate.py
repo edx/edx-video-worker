@@ -174,7 +174,7 @@ class UpdateAPIStatus:
             val_data['status'] = self.val_video_status
 
             # Final Connection
-            r2 = client.request('POST', settings['val_api_url'], json=json.dumps(val_data))
+            r2 = client.request('POST', settings['val_api_url'], json=val_data)
             if r2.status_code > 299:
                 logger.error('VAL POST/PUT')
                 return None
@@ -205,7 +205,7 @@ class UpdateAPIStatus:
 
             # Make Request, finally
             r2 = client.request('PUT', '/'.join((settings['val_api_url'], self.VideoObject.val_id)),
-                                json=json.dumps(val_data))
+                                json=val_data)
 
             if r2.status_code > 299:
                 logger.error('VAL POST/PUT')

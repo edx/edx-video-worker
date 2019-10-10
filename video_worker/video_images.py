@@ -176,7 +176,7 @@ class VideoImages(object):
                                         self.settings['oauth2_client_id'],
                                         self.settings['oauth2_client_secret'])
 
-                response = client.request('POST', self.settings['val_video_images_url'], json=json.dumps(data))
+                response = client.request('POST', self.settings['val_video_images_url'], json=data)
 
                 if not response.ok:
                     logger.error(': {id} {message}'.format(
