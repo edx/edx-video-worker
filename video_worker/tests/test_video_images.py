@@ -133,11 +133,11 @@ class VideoImagesTest(unittest.TestCase):
             ).update_val(image_keys)
 
             for course_id in course_ids:
-                expected_data = json.dumps({
+                expected_data = {
                         'course_id': course_id,
                         'edx_video_id': None,
                         'generated_images': image_keys
-                    })
+                    }
                 if post_called:
                     mock_request.assert_any_call('POST', self.settings['val_video_images_url'], json=expected_data)
                 self.assertEqual(mock_request.call_count, post_call_count)
