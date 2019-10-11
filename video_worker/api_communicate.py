@@ -164,7 +164,7 @@ class UpdateAPIStatus:
 
         if r1.status_code != 200 and r1.status_code != 404:
             # Total API Failure
-            logger.error('VAL Communication')
+            logger.error('VAL Communication error %d', r1.status_code)
             return None
 
         if r1.status_code == 404:
@@ -176,7 +176,7 @@ class UpdateAPIStatus:
             # Final Connection
             r2 = client.request('POST', settings['val_api_url'], json=val_data)
             if r2.status_code > 299:
-                logger.error('VAL POST/PUT')
+                logger.error('VAL POST error %d', r2.status_code)
                 return None
 
         elif r1.status_code == 200:
@@ -208,5 +208,5 @@ class UpdateAPIStatus:
                                 json=val_data)
 
             if r2.status_code > 299:
-                logger.error('VAL POST/PUT')
+                logger.error('VAL PUT error %d', r2.status_code)
                 return None
