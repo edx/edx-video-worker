@@ -73,7 +73,7 @@ class ValidateVideo:
         )
 
         for line in iter(p.stdout.readline, b''):
-
+            line = line.decode('utf-8')
             if 'No such file or directory' in line:
                 return False
 
@@ -140,6 +140,7 @@ class ValidateVideo:
         )
 
         for line in iter(p.stdout.readline, b''):
+            line = line.decode('utf-8')
             if "Duration: " in line:
                 # Get duration
                 if "Duration: 00:00:00.0" in line:
