@@ -12,3 +12,5 @@ gevent==1.4.0
 paramiko==2.4.3
 kombu==4.6.4
 newrelic
+-e git+https://github.com/edx/chunkey.git#egg=Chunkey
+
