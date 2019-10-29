@@ -203,7 +203,7 @@ class Encode(object):
             )
             return
 
-        for e in encode_iterator:
+        for _, e in encode_iterator:
             if e['product_spec'] == self.profile_name and e['profile_active'] is True:
                 self.resolution = e['encode_resolution']
                 self.rate_factor = e['encode_bitdepth']
