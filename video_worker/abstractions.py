@@ -189,7 +189,7 @@ class Encode(object):
         returned_text = json.loads(x.text)
         if type(returned_text) is dict:
             encodes = returned_text['results']
-            encode_iterator = returned_text['results'].items()
+            encode_iterator = enumerate(returned_text['results'])
         else:
             encodes = returned_text
             encode_iterator = enumerate(returned_text)
