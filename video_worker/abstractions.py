@@ -86,37 +86,37 @@ class Video(object):
                 headers=headers
             )
 
-            vid_dict = json.loads(x.text)
-            if len(vid_dict['results']) == 0:
-                return None
+            returned_text = json.loads(x.text)
+            videos = returned_text['results'] if type(returned_text) is dict else returned_text
+            if len(videos) > 1:
+                logger.error('Multiple video objects returned for id %s', self.veda_id)
+                return
+            if len(videos) == 0:
+                return
 
-            for v in vid_dict['results']:
-                """
-                Yeah this is horrible, but it's tied to VEDA's model
-
-                """
-                self.vid_pk = v['id']
-                self.class_id = v['inst_class']
-                self.course_url = v['course_ids']
-                self.val_id = v['studio_id']
-                self.mezz_extension = v['video_orig_extension']
-                self.mezz_bitrate = v['video_orig_bitrate']
-                self.mezz_title = v['client_title']
-                self.mezz_filesize = v['video_orig_filesize']
-                # Do some field cleaning in case of SAR/DAR legacy errors
-                mezz_resolution = v['video_orig_resolution'].strip().split(' ')[0]
-                self.mezz_resolution = mezz_resolution
-                '''Clean from unicode (00:00:00.53)'''
-                uni_duration = v['video_orig_duration']
-                self.mezz_duration = Output.seconds_from_string(uni_duration)
-                self.mezz_filepath = '/'.join((
-                    'https://s3.amazonaws.com',
-                    settings['veda_s3_hotstore_bucket'],
-                    self.veda_id
-                ))
-                if self.mezz_extension:
-                    self.mezz_filepath += '.' + self.mezz_extension
-                self.valid = True
+            v = videos[0]
+            self.vid_pk = v['id']
+            self.class_id = v['inst_class']
+            self.course_url = v['course_ids']
+            self.val_id = v['studio_id']
+            self.mezz_extension = v['video_orig_extension']
+            self.mezz_bitrate = v['video_orig_bitrate']
+            self.mezz_title = v['client_title']
+            self.mezz_filesize = v['video_orig_filesize']
+            # Do some field cleaning in case of SAR/DAR legacy errors
+            mezz_resolution = v['video_orig_resolution'].strip().split(' ')[0]
+            self.mezz_resolution = mezz_resolution
+            '''Clean from unicode (00:00:00.53)'''
+            uni_duration = v['video_orig_duration']
+            self.mezz_duration = Output.seconds_from_string(uni_duration)
+            self.mezz_filepath = '/'.join((
+                'https://s3.amazonaws.com',
+                settings['veda_s3_hotstore_bucket'],
+                self.veda_id
+            ))
+            if self.mezz_extension:
+                self.mezz_filepath += '.' + self.mezz_extension
+            self.valid = True
         else:
             VV = ValidateVideo(
                 filepath=self.mezz_filepath,
@@ -186,9 +186,15 @@ class Encode(object):
             self._default_encodes()
             return
 
-        enc_dict = json.loads(x.text)
+        returned_text = json.loads(x.text)
+        if type(returned_text) is dict:
+            encodes = returned_text['results']
+            encode_iterator = returned_text['results'].items()
+        else:
+            encodes = returned_text
+            encode_iterator = enumerate(returned_text)
 
-        if len(enc_dict['results']) == 0:
+        if len(encodes) == 0:
             logger.error(
                 ': {id} {encode} VEDA API Encode Mismatch: No Data'.format(
                     id=self.VideoObject.veda_id,
@@ -197,7 +203,7 @@ class Encode(object):
             )
             return
 
-        for e in enc_dict['results']:
+        for e in encode_iterator:
             if e['product_spec'] == self.profile_name and e['profile_active'] is True:
                 self.resolution = e['encode_resolution']
                 self.rate_factor = e['encode_bitdepth']
