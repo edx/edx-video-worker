@@ -138,11 +138,11 @@ class ApiCommunicateTest(unittest.TestCase):
             VideoObject=self.Video,
             veda_video_status=self.veda_video_status,
             val_video_status=self.val_video_status,
-            veda_video_dict={
-                'results': [{
+            veda_video_dict=[
+                {
                     'id': 123
-                }]
-            },
+                }
+            ],
             veda_token='dummy-veda-token',
             is_video_valid=is_video_valid
         )
