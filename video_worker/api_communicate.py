@@ -103,7 +103,7 @@ class UpdateAPIStatus:
         ----
         * This will update a video's status
         """
-        for u in self.veda_video_dict['results']:
+        for u in self.veda_video_dict:
             """
             This should just send transcode_active, as the other queue
             phases are controlled by other big veda pipeline steps
