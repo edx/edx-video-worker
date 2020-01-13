@@ -30,7 +30,7 @@ def veda_tokengen():
     payload = {'grant_type': 'client_credentials'}
     veda_token_response = requests.post(
         settings['veda_token_url'] + '/',
-        params=payload,
+        data=payload,
         auth=(
             settings['veda_client_id'],
             settings['veda_secret_key']
