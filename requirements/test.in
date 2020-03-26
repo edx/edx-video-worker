@@ -1,0 +1,12 @@
+-r base.txt
+coverage
+ddt
+edx-lint
+mock
+moto
+nose
+pep8
+Pillow
+tox
+
+
