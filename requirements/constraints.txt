@@ -1,0 +1,2 @@
+# to prevent idna version conflict caused by moto
+requests<2.23.0

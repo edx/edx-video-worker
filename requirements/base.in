@@ -1,0 +1,14 @@
+-c constraints.txt
+boto
+celery
+-e git+https://github.com/edx/chunkey.git#egg=Chunkey
+edx-rest-api-client
+gevent
+kombu
+paramiko
+PyYAML
+redis
+requests
+six
+urllib3
+
