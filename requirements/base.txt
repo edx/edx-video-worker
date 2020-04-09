@@ -6,37 +6,31 @@
 #
 -e git+https://github.com/edx/chunkey.git#egg=Chunkey  # via -r requirements/base.in
 amqp==2.5.2               # via kombu
-asgiref==3.2.7            # via django
 bcrypt==3.1.7             # via paramiko
 billiard==3.6.3.0         # via celery
 boto==2.49.0              # via -r requirements/base.in, chunkey
 celery==4.4.2             # via -r requirements/base.in
-certifi==2019.11.28       # via requests
+certifi==2020.4.5.1       # via requests
 cffi==1.14.0              # via bcrypt, cryptography, pynacl
 chardet==3.0.4            # via requests
-cryptography==2.8         # via paramiko
-django-waffle==0.20.0     # via edx-django-utils
-django==3.0.4             # via edx-django-utils
-edx-django-utils==3.1     # via edx-rest-api-client
-edx-rest-api-client==5.0.2  # via -r requirements/base.in
+cryptography==2.9         # via paramiko
+edx-rest-api-client==1.9.2  # via -c requirements/constraints.txt, -r requirements/base.in
 gevent==1.4.0             # via -r requirements/base.in
 greenlet==0.4.15          # via gevent
 idna==2.8                 # via requests
 importlib-metadata==1.6.0  # via kombu
 kombu==4.6.8              # via -r requirements/base.in, celery
-newrelic==5.10.0.138      # via edx-django-utils
+nose==1.3.7               # via chunkey
 paramiko==2.7.1           # via -r requirements/base.in
-psutil==1.2.1             # via edx-django-utils
 pycparser==2.20           # via cffi
 pyjwt==1.7.1              # via edx-rest-api-client
 pynacl==1.3.0             # via paramiko
-pytz==2019.3              # via celery, django
+pytz==2019.3              # via celery
 pyyaml==5.3.1             # via -r requirements/base.in, chunkey
 redis==3.4.1              # via -r requirements/base.in
 requests==2.22.0          # via -c requirements/constraints.txt, -r requirements/base.in, chunkey, edx-rest-api-client, slumber
-six==1.14.0               # via -r requirements/base.in, bcrypt, cryptography, django-waffle, pynacl
+six==1.14.0               # via -r requirements/base.in, bcrypt, cryptography, pynacl
 slumber==0.7.1            # via edx-rest-api-client
-sqlparse==0.3.1           # via django
 urllib3==1.25.8           # via -r requirements/base.in, requests
 vine==1.3.0               # via amqp, celery
 zipp==3.1.0               # via importlib-metadata

@@ -1,2 +1,5 @@
 # to prevent idna version conflict caused by moto
 requests<2.23.0
+
+# Pin version prior to caching of tokens...caching doesn't work for us because we dont use django.
+edx-rest-api-client==1.9.2
