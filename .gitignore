@@ -22,6 +22,8 @@ coverage/
 
 test_videofiles/
 
+venv/
+
 ### VisualStudioCode ###
 .vscode/*
 
