@@ -10,11 +10,13 @@ before_install:
 install:
   - make requirements
 
-matrix:
-  include:
-    - python: 3.7
-      env:
-        - TOX_ENV=py37
+python:
+  - 3.5
+  - 3.8
+
+env:
+  - TOX_ENV=testenv
+
 script: video_worker
 
 script:
