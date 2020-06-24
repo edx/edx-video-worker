@@ -1,7 +1,7 @@
 """
 Adds util classes and methods for tests.
 """
-from __future__ import absolute_import
+
 import os
 
 

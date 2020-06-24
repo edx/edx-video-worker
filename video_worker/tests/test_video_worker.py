@@ -2,7 +2,7 @@
 This file tests the working of Video Worker.
 """
 
-from __future__ import absolute_import
+
 import os
 import unittest
 

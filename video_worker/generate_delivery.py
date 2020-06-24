@@ -4,7 +4,7 @@ from VEDA_WORK_DIR, retrieves and checks URL, and passes info to objects
 
 """
 
-from __future__ import absolute_import
+
 import boto
 import boto.s3
 from boto.s3.key import Key

@@ -2,7 +2,7 @@
 Generate a serial transcode stream from a VEDA instance via Celery.
 """
 
-from __future__ import absolute_import
+
 import boto
 import logging
 import os

@@ -2,7 +2,7 @@
 Generate 3 images for a course video.
 """
 
-from __future__ import absolute_import
+
 import json
 import logging
 import math

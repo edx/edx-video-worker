@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 """
 
 Start Celery Worker (if VEDA-attached node)
