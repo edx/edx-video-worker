@@ -12,7 +12,7 @@ input, via two classes, encode and video, which can be generated either via the 
 or via celery connection to VEDA (VEDA will send video_id and encode_profile via Celery queue)
 """
 
-from __future__ import absolute_import
+
 import logging
 import os
 import sys

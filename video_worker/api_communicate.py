@@ -2,7 +2,7 @@
 This module is responsible for communication with edx-video-pipeline like sending veda and val status.
 """
 
-from __future__ import absolute_import
+
 import ast
 import json
 import logging

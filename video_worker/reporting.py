@@ -3,7 +3,7 @@ Quick and dirty error handling & logging
 
 """
 
-from __future__ import absolute_import
+
 import boto.ses
 import os
 import socket
