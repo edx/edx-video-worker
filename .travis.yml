@@ -10,8 +10,9 @@ before_install:
 install:
   - make requirements
 
+# Note we currently run on python3.7 in production
 python:
-  - 3.5
+  - 3.7
   - 3.8
 
 env:
