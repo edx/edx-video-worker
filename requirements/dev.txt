@@ -5,19 +5,20 @@
 #    make upgrade
 #
 -e git+https://github.com/edx/chunkey.git#egg=Chunkey  # via -r requirements/base.txt
-amqp==2.5.2               # via -r requirements/base.txt, kombu
+amqp==2.6.0               # via -r requirements/base.txt, kombu
 bcrypt==3.1.7             # via -r requirements/base.txt, paramiko
 billiard==3.6.3.0         # via -r requirements/base.txt, celery
 boto==2.49.0              # via -r requirements/base.txt, chunkey
-celery==4.4.2             # via -r requirements/base.txt
-certifi==2020.4.5.1       # via -r requirements/base.txt, requests
+celery==4.4.6             # via -r requirements/base.txt
+certifi==2020.6.20        # via -r requirements/base.txt, requests
 cffi==1.14.0              # via -r requirements/base.txt, bcrypt, cryptography, pynacl
 chardet==3.0.4            # via -r requirements/base.txt, requests
 cryptography==2.9.2       # via -r requirements/base.txt, paramiko
 edx-rest-api-client==1.9.2  # via -r requirements/base.txt
+future==0.18.2            # via -r requirements/base.txt, celery
 idna==2.8                 # via -r requirements/base.txt, requests
-importlib-metadata==1.6.0  # via -r requirements/base.txt, kombu
-kombu==4.6.8              # via -r requirements/base.txt, celery
+importlib-metadata==1.7.0  # via -r requirements/base.txt, kombu
+kombu==4.6.11             # via -r requirements/base.txt, celery
 nose==1.3.7               # via -r requirements/base.txt, chunkey
 paramiko==2.7.1           # via -r requirements/base.txt
 pycparser==2.20           # via -r requirements/base.txt, cffi
@@ -25,10 +26,10 @@ pyjwt==1.7.1              # via -r requirements/base.txt, edx-rest-api-client
 pynacl==1.4.0             # via -r requirements/base.txt, paramiko
 pytz==2020.1              # via -r requirements/base.txt, celery
 pyyaml==5.3.1             # via -r requirements/base.txt, chunkey
-redis==3.5.2              # via -r requirements/base.txt
-requests==2.22.0          # via -r requirements/base.txt, chunkey, edx-rest-api-client, slumber
+redis==3.5.3              # via -r requirements/base.txt
+requests==2.24.0          # via -r requirements/base.txt, chunkey, edx-rest-api-client, slumber
 six==1.15.0               # via -r requirements/base.txt, bcrypt, cryptography, pynacl
 slumber==0.7.1            # via -r requirements/base.txt, edx-rest-api-client
 urllib3==1.25.9           # via -r requirements/base.txt, requests
 vine==1.3.0               # via -r requirements/base.txt, amqp, celery
-zipp==1.2.0               # via -r requirements/base.txt, importlib-metadata
+zipp==3.1.0               # via -r requirements/base.txt, importlib-metadata
