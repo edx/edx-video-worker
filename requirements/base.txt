@@ -13,7 +13,7 @@ celery==4.4.6             # via -r requirements/base.in
 certifi==2020.6.20        # via requests
 cffi==1.14.0              # via bcrypt, cryptography, pynacl
 chardet==3.0.4            # via requests
-cryptography==2.9.2       # via paramiko
+cryptography==3.0         # via paramiko
 edx-rest-api-client==1.9.2  # via -c requirements/constraints.txt, -r requirements/base.in
 future==0.18.2            # via celery
 idna==2.8                 # via -c requirements/constraints.txt, requests
