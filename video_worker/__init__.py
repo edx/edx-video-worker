@@ -37,7 +37,7 @@ except:
     pass
 
 boto.config.set('Boto', 'http_socket_timeout', BOTO_TIMEOUT)
-server_name = os.environ['SERVER_NAME']
+server_name = os.environ.get('SERVER_NAME', 'test-worker')
 log_format = '[ENCODE_WORKER] ' + server_name + ': %(name)s - %(levelname)s - %(message)s'
 logging.basicConfig(format=log_format, level=logging.INFO)
 logging.getLogger("requests").setLevel(logging.WARNING)

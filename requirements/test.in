@@ -4,7 +4,8 @@ ddt
 edx-lint
 mock
 moto
-nose
+pytest-html
+pytest-cov
 pep8
 Pillow
 tox
